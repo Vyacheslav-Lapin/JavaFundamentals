@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "javase01.t01.main.Main"
+
+//sourceCompatibility = JavaVersion.VERSION_1_8
+//targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    compile 'org.apache.logging.log4j:log4j-api:2.4.1'
+//    compile 'org.apache.logging.log4j:log4j-core:2.4.1'
+//    testCompile 'junit:junit:4.+'
+}
+
+jar {
+    manifest.attributes("Main-Class": mainClassName);
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "2.8"
+}
