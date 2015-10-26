@@ -35,11 +35,8 @@ public class MinFinder {
                a;
 
         for (int index = 1; index <= p;)
-            if (filter(a = getA(index++))) {
-                out.println(a);
-                if (a < min)
-                    min = a;
-            }
+            if (filter(a = getA(index++)))
+                out.println((a < min) ? min = a: a);
 
         return min;
     }

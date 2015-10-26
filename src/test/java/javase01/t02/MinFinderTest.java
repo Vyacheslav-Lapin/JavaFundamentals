@@ -1,5 +1,7 @@
 package javase01.t02;
 
+import static javase01.t02.MinFinder.findMin;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,7 +13,7 @@ public class MinFinderTest {
     @Test
     public void testFindMin() throws Exception {
 
-        double min = MinFinder.findMin(2, 1);
+        double min = findMin(2, 1);
 
         System.out.println("Минимальное значение: " + min);
 
