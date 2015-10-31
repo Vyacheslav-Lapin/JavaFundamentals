@@ -40,7 +40,7 @@ public class TablePrinter {
 
     static double[][] getTable(double start, double end, double step) {
 
-        int length = (int) floor((end - start) / step);
+        int length = (int) floor((end - start) / step) + 1;
         double result[][] = new double[length][],
                x = start;
 

@@ -1,8 +1,8 @@
 package javase01.t02;
 
 import static javase01.t02.MinFinder.findMin;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -13,11 +13,11 @@ public class MinFinderTest {
     @Test
     public void testFindMin() throws Exception {
 
-        double min = findMin(2, 1);
+        double min = findMin(0.1);
 
         System.out.println("Минимальное значение: " + min);
 
-        Assert.assertTrue(min > 1.0 / 10);
-        Assert.assertTrue(min < 1.0 / 8);
+        assertTrue(min > 0.06);
+        assertTrue(min < 0.07);
     }
 }

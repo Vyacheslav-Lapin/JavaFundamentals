@@ -1,6 +1,5 @@
 package javase01.t02;
 
-import static java.lang.Double.MAX_VALUE;
 import static java.lang.Math.pow;
 import static java.lang.System.out;
 
@@ -11,14 +10,13 @@ import static java.lang.System.out;
  */
 public class MinFinder {
 
-    static double findMin(double p, double e) {
-        return new MinFinder(p, e).findMin();
+    static double findMin(double e) {
+        return new MinFinder(e).findMin();
     }
 
-    double p, e;
+    double e;
 
-    MinFinder(double p, double e) {
-        this.p = p;
+    MinFinder(double e) {
         this.e = e;
     }
 
@@ -31,13 +29,15 @@ public class MinFinder {
     }
 
     double findMin() {
-        double min = MAX_VALUE,
-               a;
+        double a;
 
-        for (int index = 1; index <= p;)
-            if (filter(a = getA(index++)))
-                out.println((a < min) ? min = a: a);
-
-        return min;
+        for (int index = 1;; index++) {
+            a = getA(index);
+            if (filter(a)) {
+                return a;
+            } else {
+                out.println(a);
+            }
+        }
     }
 }
