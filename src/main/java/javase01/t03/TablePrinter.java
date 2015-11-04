@@ -13,6 +13,8 @@ import java.io.PrintStream;
  */
 public class TablePrinter {
 
+//    private static final Logger logger = LogManager.getLogger(TablePrinter.class);
+
     double[][] table;
 
     void printTable(int quantity) {
@@ -21,14 +23,22 @@ public class TablePrinter {
 
     void printTable(int quantity, PrintStream out) {
 
-        out.println("+-------------------------+");
-        out.println("|     x     |     f(x)    |");
-        out.println("+-------------------------+");
+        printTop(quantity, out);
 
         for (double[] functionResultPair: table)
             out.printf("|% .9f|% .9f|\n", functionResultPair[0], functionResultPair[1]);
 
+        printBottom(out);
+    }
+
+    private void printBottom(PrintStream out) {
         out.print("+-------------------------+");
+    }
+
+    private void printTop(int quantity, PrintStream out) {
+        out.println("+-------------------------+"); // TODO: Сделать ширину каждого заголовка равной quantity
+        out.println("|     x     |     f(x)    |");
+        out.println("+-------------------------+");
     }
 
     public TablePrinter(double start, double end, double step) {
@@ -44,16 +54,17 @@ public class TablePrinter {
         double result[][] = new double[length][],
                x = start;
 
-        for (int index = 0; index < length; index++, x += step)
-            result[index] = getFunctionResultPair(x);
+        for (int index = 0; index < length; index++, x += step) {
+            result[index] = getDataAndResultPair(x);
+        }
 
         return result;
     }
 
-    static double[] getFunctionResultPair(double x) {
+    static double[] getDataAndResultPair(double x) {
         return new double[]{x, function(x)};
     }
-
+    
     static double function(double x) {
         return tan(2 * x) - 3;
     }

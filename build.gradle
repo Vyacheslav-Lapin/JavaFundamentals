@@ -11,8 +11,8 @@ repositories {
 }
 
 dependencies {
-//    compile 'org.apache.logging.log4j:log4j-api:2.4.1'
-//    compile 'org.apache.logging.log4j:log4j-core:2.4.1'
+    compile 'org.apache.logging.log4j:log4j-api:2.+'
+    compile 'org.apache.logging.log4j:log4j-core:2.+'
     testCompile 'junit:junit:4.+'
 }
 
