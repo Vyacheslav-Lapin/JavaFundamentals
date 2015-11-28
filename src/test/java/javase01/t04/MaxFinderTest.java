@@ -11,6 +11,6 @@ public class MaxFinderTest {
 
     @Test
     public void testGetMaximum() throws Exception {
-        assertEquals(5, new MaxFinder(new double[] {1, 2, 3, -1, 0}).getMaximum(), 0.1);
+        assertEquals(4, new MaxFinder(new double[] {1, 2, 3, -1, 0}).getMaximum(), 0.1);
     }
 }

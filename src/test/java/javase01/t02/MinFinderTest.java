@@ -1,23 +1,19 @@
 package javase01.t02;
 
-import static javase01.t02.MinFinder.findMin;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
-/**
- * @author Vyacheslav_Lapin
- */
+import static java.lang.System.out;
+import static javase01.t02.MinFinder.findMin;
+import static org.junit.Assert.assertEquals;
+
 public class MinFinderTest {
 
     @Test
     public void testFindMin() throws Exception {
 
         double min = findMin(0.1);
+        out.println("Минимальное значение: " + min);
 
-        System.out.println("Минимальное значение: " + min);
-
-        assertTrue(min > 0.06);
-        assertTrue(min < 0.07);
+        assertEquals(min, 0.06, 0.01);
     }
 }
