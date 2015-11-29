@@ -18,12 +18,11 @@ public class CrossMatrix {
 
         String result = "";
 
-//        for (int x = 0, y = 0; x < size; x = (++y % size == 0) ? x + 1: x)
-            for (int x = 0; x < size; x++) {
-                for (int y = 0; y < size; y++)
-                    result += get(x, y) ? "1 ": "0 ";
-                result += "\n";
-            }
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++)
+                result += get(x, y) ? "1 " : "0 ";
+            result += "\n";
+        }
         return result;
     }
 }

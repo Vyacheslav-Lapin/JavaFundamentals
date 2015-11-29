@@ -12,6 +12,7 @@ public class CrossMatrixTest {
 
     @Test
     public void testGet() throws Exception {
+
         CrossMatrix crossMatrix = new CrossMatrix(6);
 
         System.out.println(crossMatrix);

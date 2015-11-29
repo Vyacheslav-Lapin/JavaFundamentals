@@ -4,9 +4,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author Vyacheslav_Lapin
- */
 public class MaxFinderTest {
 
     @Test

@@ -2,9 +2,6 @@ package javase01.t03;
 
 import org.junit.Test;
 
-/**
- * @author Vyacheslav_Lapin
- */
 public class TablePrinterTest {
 
     @Test
