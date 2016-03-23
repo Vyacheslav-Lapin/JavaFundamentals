@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="HelloService" targetNamespace="http://wsserver/" xmlns:tns="http://wsserver/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <types/>
+    <message name="sayHello">
+        <part name="arg0" type="xsd:string"/>
+    </message>
+    <message name="sayHelloResponse">
+        <part name="return" type="xsd:string"/>
+    </message>
+    <portType name="Hello">
+        <operation name="sayHello">
+            <input message="tns:sayHello"/>
+            <output message="tns:sayHelloResponse"/>
+        </operation>
+    </portType>
+    <binding name="HelloPortBinding" type="tns:Hello">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
+        <operation name="sayHello">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal" namespace="http://wsserver/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://wsserver/"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="HelloService">
+        <port name="HelloPort" binding="tns:HelloPortBinding">
+            <soap:address location="http://localhost:1212/hello"/>
+        </port>
+    </service>
+</definitions>
