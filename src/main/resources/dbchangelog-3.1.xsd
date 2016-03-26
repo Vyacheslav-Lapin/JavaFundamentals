@@ -1,0 +1,1210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:tns="http://www.liquibase.org/xml/ns/dbchangelog"
+        elementFormDefault="qualified"
+        xmlns="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Taken from http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+         modified by RegExp`s:
+         1) - Find: (type|ref|base)="([^:"]+)"
+            - Replace: $1="tns:$2"
+
+         2) - Find: xsd:
+            - <empty replace>
+
+         3) - Find: \s+m(in|ax)Occurs="1"
+            - <empty replace> -->
+
+
+    <simpleType name="propertyExpression" id="propertyExpression">
+        <restriction base="string">
+            <pattern value="$\{[\w\.]+\}"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="booleanExp" id="booleanExp">
+        <annotation>
+            <appinfo>
+                <documentation>Extension to standard XSD boolean type to allow ${} parameters</documentation>
+            </appinfo>
+        </annotation>
+        <union>
+            <simpleType>
+                <restriction base="boolean"/>
+            </simpleType>
+            <simpleType>
+                <restriction base="tns:propertyExpression"/>
+            </simpleType>
+        </union>
+    </simpleType>
+
+    <simpleType name="integerExp" id="integerExp">
+        <annotation>
+            <appinfo>
+                <documentation>Extension to standard XSD integer type to allow ${} parameters</documentation>
+            </appinfo>
+        </annotation>
+        <union>
+            <simpleType>
+                <restriction base="integer"/>
+            </simpleType>
+            <simpleType>
+                <restriction base="tns:propertyExpression"/>
+            </simpleType>
+        </union>
+    </simpleType>
+
+    <simpleType name="onChangeSetPreconditionErrorOrFail">
+        <restriction base="string">
+            <enumeration value="HALT"/>
+            <enumeration value="WARN"/>
+            <enumeration value="CONTINUE"/>
+            <enumeration value="MARK_RAN"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="onChangeLogPreconditionErrorOrFail">
+        <restriction base="string">
+            <enumeration value="HALT"/>
+            <enumeration value="WARN"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="onChangeLogPreconditionOnSqlOutput">
+        <restriction base="string">
+            <enumeration value="TEST"/>
+            <enumeration value="FAIL"/>
+            <enumeration value="IGNORE"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="onChangeSetValidationFail">
+        <restriction base="string">
+            <enumeration value="HALT"/>
+            <enumeration value="MARK_RAN"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="objectQuotingStrategy">
+        <restriction base="string">
+            <enumeration value="LEGACY"/>
+            <enumeration value="QUOTE_ALL_OBJECTS"/>
+            <enumeration value="QUOTE_ONLY_RESERVED_WORDS"/>
+        </restriction>
+    </simpleType>
+
+    <!-- This is the main (root) part of the xsd -->
+    <element name="databaseChangeLog">
+        <complexType>
+            <sequence>
+                <element name="property" minOccurs="0" maxOccurs="unbounded">
+                    <complexType>
+                        <attribute name="file" type="string"/>
+                        <attribute name="name" type="string"/>
+                        <attribute name="value" type="string"/>
+                        <attribute name="dbms" type="string"/>
+                        <attribute name="context" type="string"/>
+                    </complexType>
+                </element>
+
+                <element name="preConditions" minOccurs="0">
+                    <complexType>
+                        <choice>
+                            <group ref="tns:PreConditionChildren" maxOccurs="unbounded"/>
+                        </choice>
+                        <attribute name="onFailMessage" type="string"/>
+                        <attribute name="onErrorMessage" type="string"/>
+                        <attribute name="onFail"
+                                   type="tns:onChangeLogPreconditionErrorOrFail"/>
+                        <attribute name="onError"
+                                   type="tns:onChangeLogPreconditionErrorOrFail"/>
+                        <attribute name="onSqlOutput"
+                                   type="tns:onChangeLogPreconditionOnSqlOutput"/>
+                    </complexType>
+                </element>
+
+                <choice minOccurs="0" maxOccurs="unbounded">
+                    <element name="changeSet" minOccurs="0" maxOccurs="unbounded">
+                        <complexType>
+                            <sequence>
+                                <element name="validCheckSum" minOccurs="0"
+                                         maxOccurs="unbounded">
+                                    <complexType mixed="true">
+                                        <sequence>
+                                            <element ref="tns:comment" minOccurs="0"/>
+                                        </sequence>
+                                    </complexType>
+                                </element>
+                                <element name="preConditions" minOccurs="0">
+                                    <annotation>
+                                        <appinfo>
+                                            <documentation>onChangeLogPreconditionOnSqlOutput determines what should
+                                                happen when evaluating this precondition in updateSQL mode. TEST: Run
+                                                precondition, FAIL: Fail precondition, IGNORE: Skip precondition check
+                                                [DEFAULT]
+                                            </documentation>
+                                        </appinfo>
+                                    </annotation>
+                                    <complexType>
+                                        <choice>
+                                            <group ref="tns:PreConditionChildren" maxOccurs="unbounded"/>
+                                        </choice>
+                                        <attribute name="onFailMessage" type="string"/>
+                                        <attribute name="onErrorMessage" type="string"/>
+                                        <attribute name="onFail"
+                                                   type="tns:onChangeSetPreconditionErrorOrFail"/>
+                                        <attribute name="onError"
+                                                   type="tns:onChangeSetPreconditionErrorOrFail"/>
+                                        <attribute name="onSqlOutput"
+                                                   type="tns:onChangeLogPreconditionOnSqlOutput"/>
+                                    </complexType>
+                                </element>
+                                <choice>
+                                    <element ref="tns:tagDatabase"/>
+                                    <group ref="tns:changeSetChildren" minOccurs="0"
+                                           maxOccurs="unbounded"/>
+                                </choice>
+
+                                <element name="modifySql" minOccurs="0"
+                                         maxOccurs="unbounded">
+                                    <complexType>
+                                        <choice>
+                                            <group ref="tns:modifySqlChildren"
+                                                   maxOccurs="unbounded"/>
+                                        </choice>
+                                        <attribute name="dbms" type="string"/>
+                                        <attribute name="context" type="string"/>
+                                        <attribute name="applyToRollback" type="tns:booleanExp"/>
+                                    </complexType>
+                                </element>
+
+                            </sequence>
+                            <attributeGroup ref="tns:changeSetAttributes"/>
+                            <anyAttribute namespace="##other"/>
+                        </complexType>
+                    </element>
+
+                    <!-- include -->
+                    <element name="include" minOccurs="0" maxOccurs="unbounded">
+                        <complexType>
+                            <attribute name="file" type="string" use="required"/>
+                            <attribute name="relativeToChangelogFile" type="tns:booleanExp"/>
+                            <anyAttribute namespace="##other"/>
+                        </complexType>
+                    </element>
+                    <element name="includeAll" minOccurs="0" maxOccurs="unbounded">
+                        <complexType>
+                            <attribute name="path" type="string" use="required"/>
+                            <attribute name="relativeToChangelogFile" type="tns:booleanExp"/>
+                            <attribute name="resourceFilter" type="string"/>
+                            <anyAttribute namespace="##other"/>
+                        </complexType>
+                    </element>
+                </choice>
+            </sequence>
+            <attributeGroup ref="tns:changeLogAttributes"/>
+            <anyAttribute namespace="##other"/>
+        </complexType>
+    </element>
+
+    <group name="modifySqlChildren">
+        <choice>
+            <element name="replace" minOccurs="0" maxOccurs="unbounded">
+                <complexType>
+                    <attribute name="replace" type="string" use="required"/>
+                    <attribute name="with" type="string" use="required"/>
+                </complexType>
+            </element>
+            <element name="regExpReplace" minOccurs="0"
+                     maxOccurs="unbounded">
+                <complexType>
+                    <attribute name="replace" type="string" use="required"/>
+                    <attribute name="with" type="string" use="required"/>
+                </complexType>
+            </element>
+            <element name="prepend" minOccurs="0" maxOccurs="unbounded">
+                <complexType>
+                    <attribute name="value" type="string" use="required"/>
+                </complexType>
+            </element>
+            <element name="append" minOccurs="0" maxOccurs="unbounded">
+                <complexType>
+                    <attribute name="value" type="string" use="required"/>
+                </complexType>
+            </element>
+        </choice>
+    </group>
+
+    <!-- Attributes for DatabaseInfo -->
+    <attributeGroup name="DatabaseInfoAttributes">
+        <attribute name="type" type="string"/>
+        <attribute name="version" type="string"/>
+        <attribute name="username" type="string"/>
+        <attribute name="password" type="string"/>
+        <attribute name="port" type="tns:integerExp"/>
+        <attribute name="host" type="string"/>
+        <attribute name="schemaName" type="string"/>
+        <attribute name="driverName" type="string"/>
+    </attributeGroup>
+
+    <!-- Attributes for changeSet -->
+    <attributeGroup name="changeLogAttributes">
+        <attribute name="logicalFilePath" type="string"/>
+        <attribute name="objectQuotingStrategy" type="tns:objectQuotingStrategy" default="LEGACY"/>
+    </attributeGroup>
+
+    <!-- Attributes for changeSet -->
+    <attributeGroup name="changeSetAttributes">
+        <attribute name="id" type="string" use="required"/>
+        <attribute name="author" type="string" use="required"/>
+        <attribute name="context" type="string"/>
+        <attribute name="dbms" type="string"/>
+        <attribute name="runOnChange" type="tns:booleanExp"/>
+        <attribute name="runAlways" type="tns:booleanExp"/>
+        <attribute name="failOnError" type="tns:booleanExp"/>
+        <attribute name="onValidationFail" type="tns:onChangeSetValidationFail"/>
+        <attribute name="runInTransaction" type="tns:booleanExp" default="true"/>
+        <attribute name="logicalFilePath" type="string"/>
+        <attribute name="objectQuotingStrategy" type="tns:objectQuotingStrategy"/>
+    </attributeGroup>
+
+    <!-- Attributes for constraints -->
+    <attributeGroup name="constraintsAttributes">
+        <attribute name="nullable" type="tns:booleanExp"/>
+        <attribute name="primaryKey" type="tns:booleanExp"/>
+        <attribute name="primaryKeyName" type="string"/>
+        <attribute name="primaryKeyTablespace" type="string"/>
+        <attribute name="unique" type="tns:booleanExp"/>
+        <attribute name="uniqueConstraintName" type="string"/>
+        <attribute name="references" type="string"/>
+        <attribute name="referencedTableName" type="string"/>
+        <attribute name="referencedColumnNames" type="string"/>
+        <attribute name="foreignKeyName" type="string"/>
+        <attribute name="deleteCascade" type="tns:booleanExp"/>
+        <attribute name="deferrable" type="tns:booleanExp"/>
+        <attribute name="initiallyDeferred" type="tns:booleanExp"/>
+        <attribute name="checkConstraint" type="string"/>
+    </attributeGroup>
+
+    <attributeGroup name="column">
+        <attribute name="name" type="string" use="required"/>
+        <attribute name="type" type="string"/>
+        <attribute name="value" type="string"/>
+        <attribute name="valueNumeric" type="string"/>
+        <attribute name="valueBoolean" type="string"/>
+        <attribute name="valueDate" type="string"/>
+        <attribute name="valueComputed" type="string"/>
+        <attribute name="valueSequenceCurrent" type="string"/>
+        <attribute name="valueSequenceNext" type="string"/>
+        <attribute name="valueBlobFile" type="string"/>
+        <attribute name="valueClobFile" type="string"/>
+        <attribute name="defaultValue" type="string"/>
+        <attribute name="defaultValueNumeric" type="string"/>
+        <attribute name="defaultValueDate" type="string"/>
+        <attribute name="defaultValueBoolean" type="tns:booleanExp"/>
+        <attribute name="defaultValueComputed" type="string"/>
+        <attribute name="defaultValueSequenceCurrent" type="string"/>
+        <attribute name="defaultValueSequenceNext" type="string"/>
+        <attribute name="autoIncrement" type="tns:booleanExp"/>
+        <attribute name="startWith" type="long"/>
+        <attribute name="incrementBy" type="long"/>
+        <attribute name="remarks" type="string"/>
+        <attribute name="encoding" type="string">
+            <annotation>
+                <appinfo>
+                    <documentation>
+                        Used with valueClobFile to specify file encoding explicitly.
+                    </documentation>
+                </appinfo>
+            </annotation>
+        </attribute>
+    </attributeGroup>
+
+    <complexType name="columnType" mixed="true">
+        <sequence>
+            <element ref="tns:constraints" minOccurs="0"/>
+        </sequence>
+        <attributeGroup ref="tns:column"/>
+    </complexType>
+
+    <attributeGroup name="param">
+        <attribute name="name" type="string"/>
+        <attribute name="value" type="string"/>
+        <attribute name="valueNumeric" type="string"/>
+        <attribute name="valueBoolean" type="string"/>
+        <attribute name="valueDate" type="string"/>
+        <attribute name="valueComputed" type="string"/>
+        <attribute name="valueSequenceNext" type="string"/>
+        <attribute name="valueSequenceCurrent" type="string"/>
+    </attributeGroup>
+
+    <attributeGroup name="tableNameAttribute">
+        <attribute name="catalogName" type="string"/>
+        <attribute name="schemaName" type="string"/>
+        <attribute name="tableName" type="string" use="required"/>
+    </attributeGroup>
+
+    <attributeGroup name="dropTableAttributes">
+        <attributeGroup ref="tns:tableNameAttribute"/>
+        <attribute name="cascadeConstraints" type="tns:booleanExp"/>
+    </attributeGroup>
+
+    <attributeGroup name="renameTableAttributes">
+        <attribute name="catalogName" type="string"/>
+        <attribute name="schemaName" type="string"/>
+        <attribute name="oldTableName" type="string"
+                   use="required"/>
+        <attribute name="newTableName" type="string"
+                   use="required"/>
+    </attributeGroup>
+
+    <attributeGroup name="renameViewAttributes">
+        <attribute name="catalogName" type="string"/>
+        <attribute name="schemaName" type="string"/>
+        <attribute name="oldViewName" type="string" use="required"/>
+        <attribute name="newViewName" type="string" use="required"/>
+    </attributeGroup>
+
+    <attributeGroup name="renameColumnAttributes">
+        <attributeGroup ref="tns:tableNameAttribute"/>
+        <attribute name="oldColumnName" type="string"
+                   use="required"/>
+        <attribute name="newColumnName" type="string"
+                   use="required"/>
+        <attribute name="columnDataType" type="string"/>
+        <attribute name="remarks" type="string"/>
+    </attributeGroup>
+
+    <attributeGroup name="dropColumnAttributes">
+        <attributeGroup ref="tns:tableNameAttribute"/>
+        <attribute name="columnName" type="string" use="required"/>
+    </attributeGroup>
+
+    <attributeGroup name="sequenceAttributes">
+        <attribute name="catalogName" type="string"/>
+        <attribute name="schemaName" type="string"/>
+        <attribute name="sequenceName" type="string" use="required"/>
+        <attribute name="startValue" type="string"/>
+        <attribute name="incrementBy" type="string"/>
+        <attribute name="maxValue" type="string"/>
+        <attribute name="minValue" type="string"/>
+        <attribute name="ordered" type="tns:booleanExp"/>
+    </attributeGroup>
+
+    <attributeGroup name="indexName">
+        <attribute name="indexName" type="string" use="required"/>
+    </attributeGroup>
+
+    <attributeGroup name="createIndex">
+        <attributeGroup ref="tns:tableNameAttribute"/>
+        <attributeGroup ref="tns:indexName"/>
+        <attribute name="associatedWith" type="string" use="optional"/>
+        <attribute name="unique" type="tns:booleanExp"/>
+        <attribute name="tablespace" type="string"/>
+    </attributeGroup>
+
+
+    <element name="addPrimaryKey">
+        <complexType>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="columnNames" type="string"
+                       use="required"/>
+            <attribute name="constraintName" type="string"/>
+            <attribute name="tablespace" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="dropPrimaryKey">
+        <complexType>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="constraintName" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="addUniqueConstraint">
+        <complexType>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="columnNames" type="string"
+                       use="required"/>
+            <attribute name="constraintName" type="string"/>
+            <attribute name="tablespace" type="string"/>
+            <attribute name="disabled" type="tns:booleanExp"/>
+            <attribute name="deferrable" type="tns:booleanExp"/>
+            <attribute name="initiallyDeferred" type="tns:booleanExp"/>
+        </complexType>
+    </element>
+
+    <element name="dropUniqueConstraint">
+        <complexType>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="constraintName" type="string"/>
+            <attribute name="uniqueColumns" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="modifyDataType">
+        <complexType>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="columnName" type="string" use="required"/>
+            <attribute name="newDataType" type="string" use="required"/>
+        </complexType>
+    </element>
+
+    <element name="addLookupTable">
+        <complexType>
+            <attribute name="existingTableCatalogName" type="string"/>
+            <attribute name="existingTableSchemaName" type="string"/>
+            <attribute name="existingTableName" type="string"
+                       use="required"/>
+            <attribute name="existingColumnName" type="string"
+                       use="required"/>
+            <attribute name="newTableCatalogName" type="string"/>
+            <attribute name="newTableSchemaName" type="string"/>
+            <attribute name="newTableName" type="string"
+                       use="required"/>
+            <attribute name="newColumnName" type="string"
+                       use="required"/>
+            <attribute name="newColumnDataType" type="string"/>
+            <attribute name="constraintName" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="addAutoIncrement">
+        <complexType>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="columnName" type="string" use="required"/>
+            <attribute name="columnDataType" type="string"/>
+            <attribute name="startWith" type="long"/>
+            <attribute name="incrementBy" type="long"/>
+        </complexType>
+    </element>
+
+    <element name="addDefaultValue">
+        <complexType>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="columnName" type="string" use="required"/>
+            <attribute name="columnDataType" type="string"/>
+            <attribute name="defaultValue" type="string"/>
+            <attribute name="defaultValueNumeric" type="string"/>
+            <attribute name="defaultValueDate" type="string"/>
+            <attribute name="defaultValueBoolean" type="string"/>
+            <attribute name="defaultValueComputed" type="string"/>
+            <attribute name="defaultValueSequenceNext" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="dropDefaultValue">
+        <complexType>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="columnName" type="string" use="required"/>
+            <attribute name="columnDataType" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="loadData">
+        <complexType mixed="true">
+            <sequence>
+                <element name="column" minOccurs="0" maxOccurs="unbounded">
+                    <complexType>
+                        <attribute name="index" type="tns:integerExp"/>
+                        <attribute name="header" type="string"/>
+                        <attribute name="name" type="string"/>
+                        <attribute name="type" type="string"/>
+                        <attribute name="defaultValue" type="string"/>
+                        <attribute name="defaultValueNumeric" type="string"/>
+                        <attribute name="defaultValueDate" type="string"/>
+                        <attribute name="defaultValueBoolean" type="tns:booleanExp"/>
+                        <attribute name="defaultValueComputed" type="string"/>
+                    </complexType>
+                </element>
+            </sequence>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="file" type="string"/>
+            <attribute name="encoding" type="string" default="UTF-8"/>
+            <attribute name="separator" type="string" default=","/>
+            <attribute name="quotchar" type="string" default="&quot;"/>
+        </complexType>
+    </element>
+
+    <element name="loadUpdateData">
+        <complexType mixed="true">
+            <sequence>
+                <element name="column" minOccurs="0" maxOccurs="unbounded">
+                    <complexType>
+                        <attribute name="index" type="tns:integerExp"/>
+                        <attribute name="header" type="string"/>
+                        <attribute name="name" type="string"/>
+                        <attribute name="type" type="string"/>
+                        <attribute name="defaultValue" type="string"/>
+                        <attribute name="defaultValueNumeric" type="string"/>
+                        <attribute name="defaultValueDate" type="string"/>
+                        <attribute name="defaultValueBoolean" type="tns:booleanExp"/>
+                        <attribute name="defaultValueComputed" type="string"/>
+                    </complexType>
+                </element>
+            </sequence>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="file" type="string"/>
+            <attribute name="encoding" type="string" default="UTF-8"/>
+            <attribute name="primaryKey" type="string" use="required"/>
+            <attribute name="separator" type="string" default=","/>
+            <attribute name="quotchar" type="string" default="&quot;"/>
+        </complexType>
+    </element>
+
+    <simpleType name="fkCascadeActionOptions">
+        <restriction base="token">
+            <enumeration value="CASCADE"/>
+            <enumeration value="SET NULL"/>
+            <enumeration value="SET DEFAULT"/>
+            <enumeration value="RESTRICT"/>
+            <enumeration value="NO ACTION"/>
+        </restriction>
+    </simpleType>
+
+    <attributeGroup name="addForeignKeyConstraintAttrib">
+        <attribute name="baseTableCatalogName" type="string"/>
+        <attribute name="baseTableSchemaName" type="string"/>
+        <attribute name="baseTableName" type="string"
+                   use="required"/>
+        <attribute name="baseColumnNames" type="string"
+                   use="required"/>
+        <attribute name="constraintName" type="string"
+                   use="required"/>
+        <attribute name="referencedTableCatalogName" type="string"/>
+        <attribute name="referencedTableSchemaName" type="string"/>
+        <attribute name="referencedTableName" type="string"
+                   use="required"/>
+        <attribute name="referencedColumnNames" type="string"
+                   use="required"/>
+        <attribute name="deferrable" type="tns:booleanExp"/>
+        <attribute name="initiallyDeferred" type="tns:booleanExp"/>
+        <attribute name="deleteCascade" type="tns:booleanExp"/>
+        <attribute name="onDelete" type="tns:fkCascadeActionOptions"/>
+        <attribute name="onUpdate" type="tns:fkCascadeActionOptions"/>
+        <attribute name="referencesUniqueColumn" type="tns:booleanExp"/>
+    </attributeGroup>
+
+    <attributeGroup name="addNotNullConstraintAttrib">
+        <attributeGroup ref="tns:tableNameAttribute"/>
+        <attribute name="columnName" type="string" use="required"/>
+        <attribute name="defaultNullValue" type="string"/>
+        <attribute name="columnDataType" type="string"/>
+    </attributeGroup>
+
+
+    <element name="addNotNullConstraint">
+        <complexType>
+            <attributeGroup ref="tns:addNotNullConstraintAttrib"/>
+        </complexType>
+    </element>
+
+    <element name="addForeignKeyConstraint">
+        <complexType>
+            <attributeGroup ref="tns:addForeignKeyConstraintAttrib"/>
+        </complexType>
+    </element>
+
+    <attributeGroup name="dbmsAttrib">
+        <attribute name="type" type="string" use="required"/>
+    </attributeGroup>
+
+    <element name="dbms">
+        <complexType>
+            <attributeGroup ref="tns:dbmsAttrib"/>
+        </complexType>
+    </element>
+
+    <element name="changeSetExecuted">
+        <complexType>
+            <attribute name="id" type="string" use="required"/>
+            <attribute name="author" type="string" use="required"/>
+            <attribute name="changeLogFile" type="string"
+                       use="required"/>
+        </complexType>
+    </element>
+
+    <element name="tableExists">
+        <complexType>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="tableName" type="string" use="required"/>
+        </complexType>
+    </element>
+
+    <element name="columnExists">
+        <complexType>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="tableName" type="string" use="required"/>
+            <attribute name="columnName" type="string" use="required"/>
+        </complexType>
+    </element>
+
+    <element name="sequenceExists">
+        <complexType>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="sequenceName" type="string"
+                       use="required"/>
+        </complexType>
+    </element>
+
+    <element name="foreignKeyConstraintExists">
+        <complexType>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="foreignKeyTableName" type="string"/>
+            <attribute name="foreignKeyName" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="indexExists">
+        <complexType>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="indexName" type="string"/>
+            <attribute name="tableName" type="string"/>
+            <attribute name="columnNames" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="rowCount">
+        <complexType>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="tableName" type="string"/>
+            <attribute name="expectedRows" type="int"/>
+        </complexType>
+    </element>
+
+    <element name="tableIsEmpty">
+        <complexType>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="tableName" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="changeLogPropertyDefined">
+        <complexType>
+            <attribute name="property" type="string" use="required"/>
+            <attribute name="value" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="primaryKeyExists">
+        <complexType>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="primaryKeyName" type="string"/>
+            <attribute name="tableName" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="viewExists">
+        <complexType>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="viewName" type="string" use="required"/>
+        </complexType>
+    </element>
+
+    <element name="sqlCheck">
+        <complexType mixed="true">
+            <attribute name="expectedResult" type="string"
+                       use="required"/>
+        </complexType>
+    </element>
+
+    <element name="customPrecondition">
+        <complexType>
+            <sequence>
+                <element name="param" minOccurs="0" maxOccurs="unbounded">
+                    <complexType>
+                        <attribute name="name" type="string" use="required"/>
+                        <attribute name="value" type="string" use="required"/>
+                    </complexType>
+                </element>
+            </sequence>
+            <attribute name="className" type="string" use="required"/>
+        </complexType>
+    </element>
+
+    <element name="and">
+        <complexType>
+            <choice>
+                <group ref="tns:PreConditionChildren"
+                       maxOccurs="unbounded"/>
+            </choice>
+        </complexType>
+    </element>
+
+    <element name="or">
+        <complexType>
+            <choice>
+                <group ref="tns:PreConditionChildren"
+                       maxOccurs="unbounded"/>
+            </choice>
+        </complexType>
+    </element>
+
+    <element name="not">
+        <complexType>
+            <choice>
+                <group ref="tns:PreConditionChildren"
+                       maxOccurs="unbounded"/>
+            </choice>
+        </complexType>
+    </element>
+
+    <attributeGroup name="runningAsAttrib">
+        <attribute name="username" type="string" use="required"/>
+    </attributeGroup>
+
+    <element name="runningAs">
+        <complexType>
+            <attributeGroup ref="tns:runningAsAttrib"/>
+        </complexType>
+    </element>
+
+    <attributeGroup name="objectQuotingStrategyAttrib">
+        <attribute name="strategy" type="string" use="required"/>
+    </attributeGroup>
+
+    <element name="expectedQuotingStrategy">
+        <complexType>
+            <attributeGroup ref="tns:objectQuotingStrategyAttrib"/>
+        </complexType>
+    </element>
+
+    <attributeGroup name="dropForeignKeyConstraintAttrib">
+        <attribute name="baseTableCatalogName" type="string"/>
+        <attribute name="baseTableSchemaName" type="string"/>
+        <attribute name="baseTableName" type="string"
+                   use="required"/>
+        <attribute name="constraintName" type="string"/>
+    </attributeGroup>
+
+    <element name="dropForeignKeyConstraint">
+        <complexType>
+            <attributeGroup ref="tns:dropForeignKeyConstraintAttrib"/>
+        </complexType>
+    </element>
+
+    <attributeGroup name="dropAllForeignKeyConstraintsAttrib">
+        <attribute name="baseTableCatalogName" type="string"/>
+        <attribute name="baseTableSchemaName" type="string"/>
+        <attribute name="baseTableName" type="string"
+                   use="required"/>
+    </attributeGroup>
+
+    <element name="dropAllForeignKeyConstraints">
+        <complexType>
+            <attributeGroup ref="tns:dropAllForeignKeyConstraintsAttrib"/>
+        </complexType>
+    </element>
+
+    <element name="dropNotNullConstraint">
+        <complexType>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="tableName" type="string" use="required"/>
+            <attribute name="columnName" type="string" use="required"/>
+            <attribute name="columnDataType" type="string"/>
+        </complexType>
+    </element>
+
+
+    <element name="constraints">
+        <complexType>
+            <attributeGroup ref="tns:constraintsAttributes"/>
+        </complexType>
+    </element>
+
+
+    <element name="column">
+        <complexType mixed="true">
+            <sequence>
+                <element ref="tns:constraints" minOccurs="0"/>
+            </sequence>
+            <attributeGroup ref="tns:column"/>
+        </complexType>
+    </element>
+
+    <element name="param">
+        <complexType>
+            <attributeGroup ref="tns:param"/>
+        </complexType>
+    </element>
+
+    <!-- Children for createTable -->
+    <element name="createTable">
+        <complexType>
+            <sequence>
+                <element ref="tns:column" maxOccurs="unbounded"/>
+            </sequence>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="tablespace" type="string"/>
+            <attribute name="remarks" type="string"/>
+        </complexType>
+    </element>
+
+    <!-- Children for createView -->
+    <element name="createView">
+        <complexType>
+            <simpleContent>
+                <extension base="string">
+                    <attribute name="catalogName" type="string"/>
+                    <attribute name="schemaName" type="string"/>
+                    <attribute name="viewName" type="string" use="required"/>
+                    <attribute name="replaceIfExists" type="tns:booleanExp"/>
+                </extension>
+            </simpleContent>
+        </complexType>
+    </element>
+
+    <!-- Children for insert -->
+    <element name="insert">
+        <complexType>
+            <sequence>
+                <element ref="tns:column" maxOccurs="unbounded"/>
+            </sequence>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="dbms" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="update">
+        <complexType mixed="true">
+            <sequence>
+                <element ref="tns:column" maxOccurs="unbounded"/>
+                <element name="where" minOccurs="0"/>
+                <element ref="tns:whereParams" minOccurs="0"/>
+            </sequence>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+        </complexType>
+    </element>
+
+    <element name="whereParams">
+        <complexType mixed="true">
+            <sequence>
+                <element ref="tns:param" maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+    </element>
+
+    <element name="delete">
+        <complexType mixed="true">
+            <sequence>
+                <element name="where" minOccurs="0"/>
+                <element ref="tns:whereParams" minOccurs="0"/>
+            </sequence>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+        </complexType>
+    </element>
+
+    <!-- Children for addColum -->
+    <element name="addColumn">
+        <complexType>
+            <sequence>
+                <element name="column" maxOccurs="unbounded">
+                    <complexType>
+                        <complexContent mixed="true">
+                            <extension base="tns:columnType">
+                                <attribute name="beforeColumn" type="string"/>
+                                <attribute name="afterColumn" type="string"/>
+                                <attribute name="position" type="integer"/>
+                            </extension>
+                        </complexContent>
+                    </complexType>
+                </element>
+            </sequence>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+        </complexType>
+    </element>
+
+    <element name="rollback">
+        <complexType mixed="true">
+            <choice>
+                <group ref="tns:changeSetChildren" minOccurs="0"
+                       maxOccurs="unbounded"/>
+            </choice>
+            <attribute name="changeSetPath" type="string"/>
+            <attribute name="changeSetAuthor" type="string"/>
+            <attribute name="changeSetId" type="string"/>
+        </complexType>
+    </element>
+
+    <!-- comment  -->
+    <element name="comment" type="string"/>
+
+    <!-- sql -->
+    <element name="sql">
+        <complexType mixed="true">
+            <sequence>
+                <element ref="tns:comment" minOccurs="0"/>
+            </sequence>
+            <attribute name="stripComments" type="tns:booleanExp"/>
+            <attribute name="splitStatements" type="tns:booleanExp"/>
+            <attribute name="endDelimiter" type="string"/>
+            <attribute name="dbms" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="createProcedure">
+        <complexType mixed="true">
+            <sequence>
+                <element ref="tns:comment" minOccurs="0"/>
+            </sequence>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+            <attribute name="procedureName" type="string"/>
+            <attribute name="path" type="string"/>
+            <attribute name="encoding" type="string"/>
+            <attribute name="relativeToChangelogFile" type="tns:booleanExp"/>
+            <attribute name="dbms" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="executeCommand">
+        <complexType>
+            <sequence>
+                <element name="arg" minOccurs="0" maxOccurs="unbounded">
+                    <complexType>
+                        <attribute name="value" type="string" use="required"/>
+                    </complexType>
+                </element>
+            </sequence>
+            <attribute name="executable" type="string" use="required"/>
+            <attribute name="os" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="sqlFile">
+        <complexType>
+            <attribute name="path" type="string" use="required"/>
+            <attribute name="stripComments" type="tns:booleanExp"/>
+            <attribute name="splitStatements" type="tns:booleanExp"/>
+            <attribute name="encoding" type="string" default="UTF-8"/>
+            <attribute name="endDelimiter" type="string"/>
+            <attribute name="relativeToChangelogFile" type="tns:booleanExp"/>
+            <attribute name="dbms" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="tagDatabase">
+        <complexType>
+            <attribute name="tag" type="string" use="required"/>
+        </complexType>
+    </element>
+
+    <element name="stop">
+        <complexType mixed="true"/>
+    </element>
+
+    <!-- renameTable -->
+    <element name="renameTable">
+        <complexType>
+            <attributeGroup ref="tns:renameTableAttributes"/>
+        </complexType>
+    </element>
+
+    <element name="renameView">
+        <complexType>
+            <attributeGroup ref="tns:renameViewAttributes"/>
+        </complexType>
+    </element>
+
+    <!-- dropTable -->
+    <element name="dropTable">
+        <complexType>
+            <attributeGroup ref="tns:dropTableAttributes"/>
+        </complexType>
+    </element>
+
+    <element name="dropView">
+        <complexType>
+            <attribute name="viewName" type="string" use="required"/>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+        </complexType>
+    </element>
+
+    <element name="dropProcedure">
+        <complexType>
+            <attribute name="procedureName" type="string" use="required"/>
+            <attribute name="catalogName" type="string"/>
+            <attribute name="schemaName" type="string"/>
+        </complexType>
+    </element>
+
+    <!-- renameColumn -->
+    <element name="renameColumn">
+        <complexType>
+            <attributeGroup ref="tns:renameColumnAttributes"/>
+        </complexType>
+    </element>
+
+    <element name="dropColumn">
+        <complexType>
+            <attributeGroup ref="tns:dropColumnAttributes"/>
+        </complexType>
+    </element>
+
+    <element name="mergeColumns">
+        <complexType>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attribute name="column1Name" type="string"
+                       use="required"/>
+            <attribute name="joinString" type="string" use="required"/>
+            <attribute name="column2Name" type="string"
+                       use="required"/>
+            <attribute name="finalColumnName" type="string"
+                       use="required"/>
+            <attribute name="finalColumnType" type="string"
+                       use="required"/>
+        </complexType>
+    </element>
+
+    <element name="createSequence">
+        <complexType>
+            <attributeGroup ref="tns:sequenceAttributes"/>
+            <attribute name="cycle" type="tns:booleanExp">
+                <annotation>
+                    <documentation>
+                        true for a cycling sequence, false for a non-cycling sequence.
+                        Default is false.
+                    </documentation>
+                </annotation>
+            </attribute>
+        </complexType>
+    </element>
+
+    <element name="alterSequence">
+        <complexType>
+            <attributeGroup ref="tns:sequenceAttributes"/>
+        </complexType>
+    </element>
+
+    <element name="dropSequence">
+        <complexType>
+            <attributeGroup ref="tns:sequenceAttributes"/>
+        </complexType>
+    </element>
+
+    <element name="createIndex">
+        <complexType>
+            <sequence>
+                <element ref="tns:column" maxOccurs="unbounded"/>
+            </sequence>
+            <attributeGroup ref="tns:createIndex"/>
+        </complexType>
+    </element>
+
+    <element name="dropIndex">
+        <complexType>
+            <attributeGroup ref="tns:tableNameAttribute"/>
+            <attributeGroup ref="tns:indexName"/>
+            <attribute name="associatedWith" type="string" use="optional"/>
+        </complexType>
+    </element>
+
+    <element name="customChange">
+        <complexType>
+            <sequence>
+                <element name="param" minOccurs="0" maxOccurs="unbounded">
+                    <complexType mixed="true">
+                        <attribute name="name" type="string" use="required"/>
+                        <attribute name="value" type="string"/>
+                    </complexType>
+                </element>
+            </sequence>
+            <attribute name="class" type="string" use="required"/>
+            <anyAttribute processContents="lax"/>
+        </complexType>
+    </element>
+
+
+    <!-- Children for changeSet -->
+    <group name="changeSetChildren">
+        <choice>
+            <element ref="tns:comment"/>
+            <element ref="tns:createTable" maxOccurs="unbounded"/>
+            <element ref="tns:dropTable" maxOccurs="unbounded"/>
+            <element ref="tns:createView" maxOccurs="unbounded"/>
+            <element ref="tns:renameView" maxOccurs="unbounded"/>
+            <element ref="tns:dropView" maxOccurs="unbounded"/>
+            <element ref="tns:insert" maxOccurs="unbounded"/>
+            <element ref="tns:addColumn" maxOccurs="unbounded"/>
+            <element ref="tns:sql" maxOccurs="unbounded"/>
+            <element ref="tns:createProcedure" maxOccurs="unbounded"/>
+            <element ref="tns:dropProcedure" maxOccurs="unbounded"/>
+            <element ref="tns:sqlFile" maxOccurs="unbounded"/>
+            <element ref="tns:renameTable" maxOccurs="unbounded"/>
+            <element ref="tns:renameColumn" maxOccurs="unbounded"/>
+            <element ref="tns:dropColumn" maxOccurs="unbounded"/>
+            <element ref="tns:mergeColumns" maxOccurs="unbounded"/>
+            <element ref="tns:modifyDataType" maxOccurs="unbounded"/>
+            <element ref="tns:createSequence" maxOccurs="unbounded"/>
+            <element ref="tns:alterSequence" maxOccurs="unbounded"/>
+            <element ref="tns:dropSequence" maxOccurs="unbounded"/>
+            <element ref="tns:createIndex" maxOccurs="unbounded"/>
+            <element ref="tns:dropIndex" maxOccurs="unbounded"/>
+            <element ref="tns:addNotNullConstraint" maxOccurs="unbounded"/>
+            <element ref="tns:dropNotNullConstraint" maxOccurs="unbounded"/>
+            <element ref="tns:addForeignKeyConstraint" maxOccurs="unbounded"/>
+            <element ref="tns:dropForeignKeyConstraint" maxOccurs="unbounded"/>
+            <element ref="tns:dropAllForeignKeyConstraints"
+                     maxOccurs="unbounded"/>
+            <element ref="tns:addPrimaryKey" maxOccurs="unbounded"/>
+            <element ref="tns:dropPrimaryKey" maxOccurs="unbounded"/>
+            <element ref="tns:addLookupTable" maxOccurs="unbounded"/>
+            <element ref="tns:addAutoIncrement" maxOccurs="unbounded"/>
+            <element ref="tns:addDefaultValue" maxOccurs="unbounded"/>
+            <element ref="tns:dropDefaultValue" maxOccurs="unbounded"/>
+            <element ref="tns:addUniqueConstraint" maxOccurs="unbounded"/>
+            <element ref="tns:dropUniqueConstraint" maxOccurs="unbounded"/>
+            <element ref="tns:customChange" maxOccurs="unbounded"/>
+            <element ref="tns:update" maxOccurs="unbounded"/>
+            <element ref="tns:delete" maxOccurs="unbounded"/>
+            <element ref="tns:loadData" maxOccurs="unbounded"/>
+            <element ref="tns:loadUpdateData" maxOccurs="unbounded"/>
+            <element ref="tns:executeCommand" maxOccurs="unbounded"/>
+            <element ref="tns:stop" maxOccurs="unbounded"/>
+            <element ref="tns:rollback"/>
+            <any namespace="##other" processContents="lax" minOccurs="0"
+                 maxOccurs="unbounded"/>
+        </choice>
+    </group>
+
+    <!-- Children for Precondition -->
+    <group name="PreConditionChildren">
+        <sequence>
+            <choice>
+                <element ref="tns:and" maxOccurs="unbounded"/>
+                <element ref="tns:or" maxOccurs="unbounded"/>
+                <element ref="tns:not" maxOccurs="unbounded"/>
+                <element ref="tns:dbms" maxOccurs="unbounded"/>
+                <element ref="tns:runningAs" maxOccurs="unbounded"/>
+                <element ref="tns:changeSetExecuted" maxOccurs="unbounded"/>
+                <element ref="tns:tableExists" maxOccurs="unbounded"/>
+                <element ref="tns:columnExists" maxOccurs="unbounded"/>
+                <element ref="tns:sequenceExists" maxOccurs="unbounded"/>
+                <element ref="tns:foreignKeyConstraintExists" maxOccurs="unbounded"/>
+                <element ref="tns:indexExists" maxOccurs="unbounded"/>
+                <element ref="tns:primaryKeyExists" maxOccurs="unbounded"/>
+                <element ref="tns:viewExists" maxOccurs="unbounded"/>
+                <element ref="tns:tableIsEmpty" maxOccurs="unbounded"/>
+                <element ref="tns:rowCount" maxOccurs="unbounded"/>
+                <element ref="tns:sqlCheck" maxOccurs="unbounded"/>
+                <element ref="tns:changeLogPropertyDefined" maxOccurs="unbounded"/>
+                <element ref="tns:expectedQuotingStrategy" maxOccurs="unbounded"/>
+                <element ref="tns:customPrecondition" maxOccurs="unbounded"/>
+                <any namespace="##other" processContents="lax" minOccurs="0"
+                     maxOccurs="unbounded"/>
+            </choice>
+        </sequence>
+
+    </group>
+</schema>

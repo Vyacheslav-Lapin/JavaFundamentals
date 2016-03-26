@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema"
-        targetNamespace="http://www.epam.tc.com/note"
-        xmlns:tns="http://www.epam.tc.com/note"
+<schema targetNamespace="http://www.epam.tc.com/note" xmlns:tns="http://www.epam.tc.com/note"
+        xmlns="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified">
 
     <element name="notes">
         <complexType>
             <sequence>
-                <element name="note" type="tns:Note"
-                         maxOccurs="unbounded"/>
+                <element name="note" type="tns:Note" maxOccurs="unbounded"/>
             </sequence>
         </complexType>
     </element>
