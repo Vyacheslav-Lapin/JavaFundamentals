@@ -3,7 +3,6 @@ apply plugin: "eclipse"
 
 subprojects {
     apply plugin: "java"
-//    apply plugin: 'application'
 
     tasks.withType(JavaCompile) {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -15,9 +14,6 @@ subprojects {
     }
 
     dependencies {
-        compile 'com.h2database:h2:1.4.191'
-        compile 'org.apache.logging.log4j:log4j-api:2.+'
-        compile 'org.apache.logging.log4j:log4j-core:2.+'
         testCompile 'junit:junit:4.12'
     }
 

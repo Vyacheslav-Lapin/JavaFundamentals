@@ -1,3 +1,6 @@
+apply plugin: 'war'
+
 dependencies {
     compile project(":core")
+    providedCompile 'org.apache.tomcat:tomcat-api:9.0.0.M4'
 }

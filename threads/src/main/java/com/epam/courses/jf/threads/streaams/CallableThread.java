@@ -1,4 +1,4 @@
-package com.epam.courses.jf.intro.demo;
+package com.epam.courses.jf.threads.streaams;
 
 import java.util.concurrent.Callable;
 

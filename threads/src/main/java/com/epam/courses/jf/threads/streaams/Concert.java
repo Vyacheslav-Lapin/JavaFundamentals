@@ -1,6 +1,4 @@
-package com.epam.courses.jf.intro.demo;
-
-import com.epam.courses.jf.threads.streaams.Artist;
+package com.epam.courses.jf.threads.streaams;
 
 import java.util.HashSet;
 import java.util.Set;

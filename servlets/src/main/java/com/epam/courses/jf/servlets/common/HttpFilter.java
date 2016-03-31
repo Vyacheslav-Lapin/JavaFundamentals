@@ -1,0 +1,19 @@
+package com.epam.courses.jf.servlets.common;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@FunctionalInterface
+public interface HttpFilter extends Filter {
+
+    void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException;
+
+    @Override
+    default void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse resp = (HttpServletResponse) response;
+        doFilter(req, resp, chain);
+    }
+}
