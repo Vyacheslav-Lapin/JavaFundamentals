@@ -12,8 +12,6 @@ public interface HttpFilter extends Filter {
 
     @Override
     default void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse resp = (HttpServletResponse) response;
-        doFilter(req, resp, chain);
+        doFilter((HttpServletRequest) request, (HttpServletResponse) response, chain);
     }
 }

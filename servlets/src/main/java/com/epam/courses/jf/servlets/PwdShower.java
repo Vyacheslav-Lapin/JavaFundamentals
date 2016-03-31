@@ -1,4 +1,4 @@
-package com.epam.courses.jf.servlets.demo;
+package com.epam.courses.jf.servlets;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,15 +12,12 @@ import java.io.PrintWriter;
 public class PwdShower extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html; charset=utf-8");
-
         String login = request.getParameter("login");
         String password = request.getParameter("password");
 
-        try (PrintWriter out = response.getWriter()) {
-            out.println("Your login (твой логин): " + login);
-            out.println("<br />Your password (твой пароль): " + password);
-        }
+        PrintWriter out = (PrintWriter) request.getAttribute("writer");
+        out.println("Your login (твой логин): " + login);
+        out.println("<br/>Your password (твой пароль): " + password);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

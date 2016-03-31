@@ -1,4 +1,4 @@
-package com.epam.courses.jf.servlets.demo;
+package com.epam.courses.jf.servlets;
 
 import com.epam.courses.jf.servlets.common.HttpFilter;
 import com.epam.courses.jf.servlets.common.Logger;
@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter("/PwdShower")
-public class loggingFilter implements HttpFilter {
+public class LoggingFilter implements HttpFilter {
 
-    static Logger logger = System.out::println;
+    private static Logger logger = System.out::println;
 
 //    @Override
 //    public void init(FilterConfig filterConfig) throws ServletException {
