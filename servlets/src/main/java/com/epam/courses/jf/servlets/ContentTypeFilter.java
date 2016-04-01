@@ -12,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(
-        value = "/PwdShower",
+@WebFilter(value = {"/PwdShower", "/Cookies"},
         initParams = {@WebInitParam(name = "characterEncoding", value = "utf-8")})
 public class ContentTypeFilter implements HttpFilter {
 

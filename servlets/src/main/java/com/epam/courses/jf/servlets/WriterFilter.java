@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebFilter("/PwdShower")
+@WebFilter({"/PwdShower", "/Cookies"})
 public class WriterFilter implements HttpFilter {
 
     private static Logger logger = System.out::println;

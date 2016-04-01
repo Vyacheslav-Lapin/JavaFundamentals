@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter("/PwdShower")
+@WebFilter({"/PwdShower", "/Cookies"})
 public class LoggingFilter implements HttpFilter {
 
     private static Logger logger = System.out::println;

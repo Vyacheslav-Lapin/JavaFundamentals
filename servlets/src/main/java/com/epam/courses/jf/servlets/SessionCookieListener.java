@@ -13,6 +13,6 @@ public class SessionCookieListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        logger.info("SessionID = " + se.getSession().getId());
+        logger.info("SessionCookieListener: SessionID = " + se.getSession().getId());
     }
 }
