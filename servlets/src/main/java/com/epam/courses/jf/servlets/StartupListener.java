@@ -13,6 +13,6 @@ public class StartupListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        logger.info("StartupListener: Я родился!");
+        logger.info("Application is started!");
     }
 }

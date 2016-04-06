@@ -1,15 +1,15 @@
 package com.epam.courses.jf.strings;
 
-import java.sql.SQLException;
-
 public class CreateStringWithoutPooling {
 
-    public static void main(String... args) throws ClassNotFoundException, SQLException {
+    public static String toNonePooledString(CharSequence charSequence) {
 
-        String s1 = new StringBuffer("He").append("llo").toString();
-        String s2 = "Hello";
-        System.out.println(s2 == s1);
-        System.out.println(s2 == s1.intern());
+        int length = charSequence.length();
+        int breakInterval = length / 2;
 
+        CharSequence charSequence1 = charSequence.subSequence(0, breakInterval);
+        CharSequence charSequence2 = charSequence.subSequence(breakInterval, length);
+
+        return new StringBuffer(charSequence1).append(charSequence2).toString();
     }
 }

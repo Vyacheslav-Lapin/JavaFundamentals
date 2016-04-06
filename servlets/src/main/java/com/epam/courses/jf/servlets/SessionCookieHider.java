@@ -1,18 +1,17 @@
 package com.epam.courses.jf.servlets;
 
-import com.epam.courses.jf.servlets.common.Logger;
-
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+/**
+ * Защита от доступа со стороны пользовательских script`ов
+ */
 @WebListener
-public class SessionCookieListener implements HttpSessionListener {
-
-    private static Logger logger = System.out::println;
+public class SessionCookieHider implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        logger.info("SessionCookieListener: SessionID = " + se.getSession().getId());
+        se.getSession().getServletContext().getSessionCookieConfig().setHttpOnly(true);
     }
 }
