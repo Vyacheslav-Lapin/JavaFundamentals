@@ -2,5 +2,7 @@ apply plugin: 'war'
 
 dependencies {
     compile project(":core")
-    compile project(":servlets")
+    providedCompile 'org.apache.tomcat:tomcat-api:+'
+    providedCompile 'org.apache.tomcat:tomcat-jsp-api:+'
+//    compile project(":servlets")
 }
