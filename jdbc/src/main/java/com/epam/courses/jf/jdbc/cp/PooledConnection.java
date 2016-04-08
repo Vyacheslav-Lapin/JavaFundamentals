@@ -40,10 +40,10 @@ public interface PooledConnection extends ConnectionProxy {
         if (toSrc().isReadOnly()) {
             toSrc().setReadOnly(false);
         }
-        if (!getReservedConnections().remove(this)) {
+        if (!getReservedConnections().remove(this.toSrc())) {
             throw new SQLException("Error deleting connection from the given away connections pool.");
         }
-        if (!getFreeConnections().offer(this)) {
+        if (!getFreeConnections().offer(this.toSrc())) {
             throw new SQLException("Error allocating connection in the pool.");
         }
     }
