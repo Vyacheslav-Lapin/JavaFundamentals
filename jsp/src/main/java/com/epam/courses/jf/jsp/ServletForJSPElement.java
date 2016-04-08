@@ -11,21 +11,17 @@ import java.io.IOException;
 public class ServletForJSPElement extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-//        request.setCharacterEncoding("utf-8");
-//        response.setContentType("text/html");
-//        if ("naming".equals(request.getParameter("command"))) request.
-//                getRequestDispatcher("use-bean/usebean.jsp").
-//                forward(request, response);
-
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html");
+
         SimpleBean s = new SimpleBean();
         s.setName(request.getParameter("name"));
         s.setSurname(request.getParameter("surname"));
         request.setAttribute("mybean", s);
-        if ("naming".equals(request.getParameter("command"))) request.
-                getRequestDispatcher("/use-bean/usebean.jsp").
-                forward(request, response);
+
+        if ("naming".equals(request.getParameter("command")))
+            request.getRequestDispatcher("use-bean/usebean.jsp")
+                    .forward(request, response);
 
     }
 
