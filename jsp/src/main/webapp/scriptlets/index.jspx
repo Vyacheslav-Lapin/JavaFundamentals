@@ -1,0 +1,17 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html; charset=UTF-8" />
+    <html>
+    <body>
+    <jsp:declaration>
+        private int count = 0;
+        String version = "J2EE 1.5";
+        private String getName() {
+            return "J2EE 1.6 or 1.7";
+        }</jsp:declaration>
+    Значение count: <jsp:expression>count++</jsp:expression>
+    <br/>Значение count после инкремента: <jsp:expression>count</jsp:expression>
+    <br/>Старое значение version: <jsp:expression>version</jsp:expression>
+    <br/>Новое значение version: <jsp:expression>version = getName()</jsp:expression>
+    </body>
+    </html>
+</jsp:root>

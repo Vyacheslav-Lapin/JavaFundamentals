@@ -3,7 +3,6 @@ package com.epam.courses.jf.jsp;
 import java.util.Date;
 
 public class SimpleBean {
-
     private String name;
     private String surname;
     private Date date;
@@ -30,5 +29,13 @@ public class SimpleBean {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleBean{" + "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", date=" + date +
+                '}';
     }
 }
