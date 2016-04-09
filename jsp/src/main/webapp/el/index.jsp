@@ -22,17 +22,17 @@ ${sessionScope.salary}
 <br/>${header["host"]}
 <br/>
 
-<% pageContext.setAttribute("collection", asList("Мама", "мыла", "раму1"));%>
+<% pageContext.setAttribute("strings", Arrays.asList("Мама", "мыла", "раму1")); %>
 
-collection[0] - ${collection[0]}
-<br/>
+${strings[0]}
 
-<c:if test="${not empty collection[2] and collection[2] eq 'раму'}">
+<c:if test="${not empty strings and strings[2] != 'раму1'}">
     <c:redirect url="/index.html"/>
 </c:if>
 
+<br/><br/><br/><br/><br/>
 
-<%--${}--%>
+<%--${not empty strings and strings[2] != 'раму'}--%>
 
 </body>
 </html>

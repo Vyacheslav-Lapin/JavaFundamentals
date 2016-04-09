@@ -2,62 +2,76 @@ package com.epam.courses.jf.jdbc.cp;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.stream.IntStream;
+
+import static java.lang.Integer.parseInt;
 
 public class ConnectionPool {
+
+    private String url;
+    private Properties properties;
+    private int poolSize;
 
     private BlockingQueue<Connection> freeConnections;
     private BlockingQueue<Connection> reservedConnections;
 
-    private String driverName;
-    private String url;
-    private String user;
-    private String password;
-    private int poolSize;
-
     public ConnectionPool() {
-
-        Properties properties = new Properties();
-        try (FileInputStream fileInputStream = new FileInputStream("src/main/resources/db.properties")) {
-            properties.load(fileInputStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        driverName = properties.getProperty("driver", "org.h2.Driver");
-        url = properties.getProperty("url", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        user = properties.getProperty("user", "");
-        password = properties.getProperty("password", "");
-        poolSize = Integer.parseInt(properties.getProperty("poolsize", "5"));
-
-        initPoolData();
+        this("src/main/resources/db.properties");
     }
 
-    private void initPoolData() {
-        Locale.setDefault(Locale.ENGLISH);
+    public ConnectionPool(String propertyFileName) {
+        this(new Properties() {
+            private Properties load() {
+                try (InputStream inputStream = new FileInputStream(propertyFileName)) {
+                    load(inputStream);
+                    return this;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }.load());
+    }
+
+    public ConnectionPool(Properties properties) {
+        this((String) properties.remove("url"),
+                parseInt((String) properties.remove("poolSize")),
+                properties);
+    }
+
+    public ConnectionPool(String url, int poolSize, Properties properties) {
+        assert properties.containsKey("user");
+        assert properties.containsKey("password");
 
         try {
-            Class.forName(driverName);
-            reservedConnections = new ArrayBlockingQueue<>(poolSize);
-            freeConnections = new ArrayBlockingQueue<>(poolSize);
-
-            for (int i = 0; i < poolSize; i++) {
-                Connection connection = DriverManager.getConnection(url, user, password);
-                PooledConnection pooledConnection =
-                        PooledConnection.wrap(connection, freeConnections, reservedConnections);
-                freeConnections.add(pooledConnection);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("SQLException in ConnectionPool", e);
+            Class.forName(properties.remove("driver").toString());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Can't find database driver class", e);
         }
+
+        this.url = url;
+        this.properties = properties;
+        this.poolSize = poolSize;
+        reservedConnections = new ArrayBlockingQueue<>(poolSize);
+        freeConnections = new ArrayBlockingQueue<>(poolSize);
+
+        IntStream.range(0, poolSize)
+                .mapToObj(value -> {
+                    try {
+                        return DriverManager.getConnection(url, properties);
+                    } catch (SQLException e) {
+                        throw new RuntimeException("SQLException in ConnectionPool", e);
+                    }
+                })
+                .map(connection -> PooledConnection.wrap(connection, freeConnections, reservedConnections))
+                .forEach(freeConnections::add);
+
     }
 
     public Connection takeConnection() {
