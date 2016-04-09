@@ -8,5 +8,4 @@ dependencies {
     compile 'org.glassfish.web:javax.servlet.jsp.jstl:+'
     providedCompile 'org.apache.tomcat:tomcat-api:+'
     providedCompile 'org.apache.tomcat:tomcat-jsp-api:+'
-
 }

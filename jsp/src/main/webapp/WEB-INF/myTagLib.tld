@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<taglib version="2.1"
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+        http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>mtl</short-name>
+    <uri>http://epam.com/courses/jf/jsp/myTagLib</uri>
+
+    <tag>
+        <name>jspset</name>
+        <tag-class>com.epam.courses.jf.jsp.SpecialJSPTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>set</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>bodyJspSet</name>
+        <tag-class>com.epam.courses.jf.jsp.JSPTagWithBody</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>num</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+</taglib>
