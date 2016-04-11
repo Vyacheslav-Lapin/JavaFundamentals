@@ -8,8 +8,8 @@ import java.io.IOException;
 public class JSPTagWithBody extends BodyTagSupport {
     private int num;
 
-    public void setNum(String num) {
-        this.num = new Integer(num);
+    public void setNum(int num) {
+        this.num = num;
     }
 
     @Override
@@ -17,10 +17,10 @@ public class JSPTagWithBody extends BodyTagSupport {
         try {
             pageContext.getOut().write(
                     "<table style=\"border: 3px solid #000; width: 100%\"><tr><td>");
+            return EVAL_BODY_INCLUDE;
         } catch (IOException e) {
-            throw new JspTagException(e.getMessage());
+            throw new JspTagException(e);
         }
-        return EVAL_BODY_INCLUDE;
     }
 
     @Override
@@ -28,19 +28,19 @@ public class JSPTagWithBody extends BodyTagSupport {
         if (num-- <= 1) return SKIP_BODY;
         try {
             pageContext.getOut().write("</td></tr><tr><td>");
+            return EVAL_BODY_AGAIN;
         } catch (IOException e) {
-            throw new JspTagException(e.getMessage());
+            throw new JspTagException(e);
         }
-        return EVAL_BODY_AGAIN;
     }
 
     @Override
     public int doEndTag() throws JspException {
         try {
             pageContext.getOut().write("</td></tr></table>");
+            return SKIP_BODY;
         } catch (IOException e) {
-            throw new JspTagException(e.getMessage());
+            throw new JspTagException(e);
         }
-        return SKIP_BODY;
     }
 }

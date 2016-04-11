@@ -15,7 +15,7 @@ public class TagLibController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("userBean", new JSPSetBean(getStringSet()));
-        request.getRequestDispatcher("/taglib/main.jsp").forward(request, response);
+        request.getRequestDispatcher("/taglib/index.jsp").forward(request, response);
     }
 
     private Set<String> getStringSet() {

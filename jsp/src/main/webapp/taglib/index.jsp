@@ -1,16 +1,28 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-
+<%@ page contentType="text/html;charset=UTF-8"
+         language="java"
+         import="com.epam.courses.jf.jsp.JSPSetBean" %>
+<%@ taglib uri="http://epam.com/courses/jf/jsp/myTagLib" prefix="mytag"%>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Tagib Example</title>
+    <title>TagLib example</title>
 </head>
 <body>
 
-<form action="/TagLibController" method="post">
-    <input type="submit" value="tap me" /><br />
-</form>
+<%--<jsp:useBean id="userBean" class="com.epam.courses.jf.jsp.JSPSetBean" scope="request"/>--%>
+<%
+    final JSPSetBean userBean = (JSPSetBean) request.getAttribute("userBean");
+    pageContext.setAttribute("userBean", userBean);
+%>
 
+${userBean.size}
+
+<mytag:jspset set="${userBean}"/>
+
+<br/>
+
+<mytag:bodyJspSet num="${userBean.size}">
+    ${userBean.element}
+</mytag:bodyJspSet>
 
 </body>
 </html>

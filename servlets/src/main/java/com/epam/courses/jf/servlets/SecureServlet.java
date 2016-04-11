@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//@WebServlet("/secure/account")
+//@WebServlet("/secured/account")
 //@ServletSecurity(
 //        value=@HttpConstraint(rolesAllowed = ""),
 //        httpMethodConstraints={
