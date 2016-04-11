@@ -348,7 +348,7 @@
   <!--                        should not be enabled for production systems. -->
   <!--                        [0]                                           -->
   <!--                                                                      -->
-  <!--   executable           Name of the executable used to run the        -->
+  <!--   executable           Name of the executable used to call the        -->
   <!--                        script. [perl]                                -->
   <!--                                                                      -->
   <!--   parameterEncoding    Name of parameter encoding to be used with    -->

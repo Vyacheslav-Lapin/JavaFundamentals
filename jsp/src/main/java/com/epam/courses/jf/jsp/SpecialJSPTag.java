@@ -1,9 +1,10 @@
 package com.epam.courses.jf.jsp;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
+
+import static java.util.stream.Collectors.joining;
 
 public class SpecialJSPTag extends TagSupport {
 
@@ -15,20 +16,14 @@ public class SpecialJSPTag extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
-        int size = set.getSize();
-
-        try{
-            JspWriter out = pageContext.getOut();
-
-            out.write("Size = <b>(" + size + ")</b><table style=\"border: 1px solid #000\">");
-
-            for(int i=0; i < size; i++)
-                out.write("<tr><td>" + set.getElement() + "</td></tr>");
-
-            out.write("</table>");
-
-        }catch(IOException e){
-            throw new JspException(e.getMessage());
+        try {
+            pageContext.getOut()
+                    .write("Size = <b>(" + set.getSize() + ")</b>"
+                            + "<table style=\"border: 1px solid #000\"><tr><td>"
+                            + set.elements().collect(joining("</td></tr><tr><td>"))
+                            + "</td></tr></table>");
+        } catch(IOException e) {
+            throw new JspException(e);
         }
         return SKIP_BODY;
     }

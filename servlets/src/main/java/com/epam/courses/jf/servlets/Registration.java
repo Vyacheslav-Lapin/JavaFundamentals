@@ -6,18 +6,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-@WebServlet("/PwdShower")
-public class PwdShower extends HttpServlet {
+import static java.util.Optional.ofNullable;
+
+@WebServlet("/registration")
+public class Registration extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
+        ofNullable(request.getParameter("login"))
+                .flatMap(login -> ofNullable(request.getParameter("password"))
+                        .map(password -> "Your login (твой логин): " + login + "<br/>Your password (твой пароль): " + password))
+                .ifPresent(response.getWriter()::write);
 
-        PrintWriter out = (PrintWriter) request.getAttribute("writer");
-        out.println("Your login (твой логин): " + login);
-        out.println("<br/>Your password (твой пароль): " + password);
+        request.getRequestDispatcher("/registration/index.html").include(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

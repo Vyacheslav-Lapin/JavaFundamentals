@@ -1,26 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1"
          xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
 
-    <!--<servlet>-->
-    <!--<servlet-name>HelloWorld</servlet-name>-->
-    <!--<servlet-class>com.epam.courses.jf.servlets.HelloWorld</servlet-class>-->
-    <!--</servlet>-->
-
-    <!--<servlet-mapping>-->
-    <!--<servlet-name>HelloWorld</servlet-name>-->
-    <!--<url-pattern>/helloWorld</url-pattern>-->
-    <!--</servlet-mapping>-->
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>SecurePages</web-resource-name>
-            <url-pattern>/secure/*</url-pattern>
-            <http-method>POST</http-method>
-            <http-method>GET</http-method>
-        </web-resource-collection>
-    </security-constraint>
+    <!--<security-constraint>-->
+        <!--<web-resource-collection>-->
+            <!--<web-resource-name>secured</web-resource-name>-->
+            <!--<url-pattern>/secured/*</url-pattern>-->
+        <!--</web-resource-collection>-->
+        <!--<auth-constraint>-->
+            <!--<role-name>user</role-name>-->
+        <!--</auth-constraint>-->
+        <!--<user-data-constraint>-->
+            <!--<transport-guarantee>INTEGRAL</transport-guarantee>-->
+        <!--</user-data-constraint>-->
+    <!--</security-constraint>-->
 
 </web-app>

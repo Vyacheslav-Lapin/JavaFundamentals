@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter({"/PwdShower", "/Cookies"})
+@WebFilter({"/registration", "/сookies"})
 public class LoggingFilter implements HttpFilter {
 
     private static Logger logger;

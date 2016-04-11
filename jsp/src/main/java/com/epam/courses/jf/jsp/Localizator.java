@@ -7,12 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static java.util.Optional.ofNullable;
+
 @WebServlet("/Localizator")
 public class Localizator extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession(true).setAttribute("local", request.getParameter("local"));
+
+        ofNullable(request.getParameter("locale"))
+                .ifPresent(locale -> request.getSession(true).setAttribute("local", locale));
+
         request.getRequestDispatcher("/localize/index.jsp").forward(request, response);
     }
 

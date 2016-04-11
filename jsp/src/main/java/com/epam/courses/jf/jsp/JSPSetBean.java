@@ -2,6 +2,7 @@ package com.epam.courses.jf.jsp;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class JSPSetBean {
     private Iterator<String> it;
@@ -15,6 +16,10 @@ public class JSPSetBean {
         return set.size();
     }
 
+    /**
+     * @deprecated use {@link #elements()}
+     */
+    @Deprecated
     public String getElement() {
         if (it == null || !it.hasNext())
             it = set.iterator();
@@ -22,5 +27,7 @@ public class JSPSetBean {
         return it.next();
     }
 
-
+    public Stream<String> elements() {
+        return set.stream();
+    }
 }
