@@ -1,35 +1,32 @@
 package com.epam.courses.jf.xml.ws;
 
-import com.epam.courses.jf.xml.ws.wsclient.HelloService;
+import com.epam.courses.jf.xml.ws.client.HelloService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.xml.ws.Endpoint;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class HelloTest {
 
-    private Endpoint endpoint;
+    private Endpoint helloServiceEndPoint;
 
     @Before
-    public void sayHello() throws Exception {
-        String url = "http://localhost:1234/hello";
-        endpoint = Endpoint.publish(url, new Hello());
-        System.out.println("Service started @ " + url + "?wsdl");
-    }
-
-    @Test
-    public void aVoid() {
-        final HelloService helloService = new HelloService();
-        final com.epam.courses.jf.xml.ws.wsclient.Hello hello = helloService.getHelloPort();
-        assertThat(hello.sayHello("Henry"), is("Hello, Henry"));
+    public void setUp() throws Exception {
+        helloServiceEndPoint = Endpoint.publish("http://localhost:1212/hello", new Hello());
     }
 
     @After
-    public void destroy() {
-        endpoint.stop();
+    public void tearDown() throws Exception {
+        helloServiceEndPoint.stop();
     }
+
+    @Test
+    public void sayHello() throws Exception {
+        assertThat(new HelloService().getHelloPort().sayHello("Henry"), is("Hello, Henry"));
+    }
+
 }
