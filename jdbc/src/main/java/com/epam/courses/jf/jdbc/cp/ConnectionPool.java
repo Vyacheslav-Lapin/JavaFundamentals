@@ -52,7 +52,7 @@ public interface ConnectionPool extends AutoCloseable {
         assert properties.containsKey("password");
         assert properties.containsKey("driver");
 
-        loadClass(properties.remove("driver").toString(), "Can't find database driver class");
+        loadClass(getAndRemove(properties, "driver"), "Can't find database driver class");
         return new SimpleConnectionPool(poolSize, () -> createConnection(url, properties));
     }
 
