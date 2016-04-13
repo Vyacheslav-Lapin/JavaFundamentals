@@ -12,7 +12,7 @@ public interface ExceptionalConsumer<T, E extends Throwable> extends Consumer<T>
         try {
             call(t);
         } catch (Throwable e) {
-            ifThrowable((E) e);
+            ifThrowable(t, (E) e);
         }
     }
 

@@ -9,7 +9,7 @@ import static javax.jws.soap.SOAPBinding.Style.RPC;
 @WebService(targetNamespace = "http://epam.com/courses/jf/xml/ws")
 @SOAPBinding(style= RPC)
 public class Hello {
-    public String sayHello(@WebParam(name = "name", partName = "name") String name) {
+    public String sayHello(@WebParam(name = "name") String name) {
         return "Hello, " + name;
     }
 }

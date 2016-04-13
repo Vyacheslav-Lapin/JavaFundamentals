@@ -12,21 +12,26 @@ import static org.junit.Assert.assertThat;
 
 public class HelloTest {
 
-    private Endpoint helloServiceEndPoint;
+    private Endpoint publish;
+    private com.epam.courses.jf.xml.ws.client.Hello hello;
 
     @Before
-    public void setUp() throws Exception {
-        helloServiceEndPoint = Endpoint.publish("http://localhost:1212/hello", new Hello());
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        helloServiceEndPoint.stop();
+    public void prepare() {
+        publish = Endpoint.publish("http://localhost:1212/hello", new Hello());
     }
 
     @Test
     public void sayHello() throws Exception {
-        assertThat(new HelloService().getHelloPort().sayHello("Henry"), is("Hello, Henry"));
+        assertThat(new Hello().sayHello("John Doe"), is("Hello, John Doe"));
     }
 
+    @Test
+    public void sayHelloByRPC() {
+        assertThat(HelloService.getHello().sayHello("Henry"), is("Hello, Henry"));
+    }
+
+    @After
+    public void destroy() {
+        publish.stop();
+    }
 }
