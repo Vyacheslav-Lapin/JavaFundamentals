@@ -6,8 +6,8 @@ import java.util.function.Function;
 
 public class Either<L, R> {
 
-    private L left;
-    private R right;
+    private final L left;
+    private final R right;
 
     private Either(L left, R right) {
         this.left = left;
@@ -35,21 +35,33 @@ public class Either<L, R> {
     }
 
     public boolean isLeft() {
-        return left != null;
+        return right == null;
     }
 
     public boolean isRight() {
-        return right != null;
+        return left == null;
     }
 
-    public Either<L, R> ifLeft(Consumer<L> leftConsumer) {
-        leftConsumer.accept(left);
+    public Either<L, R> peekLeft(Consumer<L> leftConsumer) {
+        if (isLeft())
+            leftConsumer.accept(left);
         return this;
     }
 
-    public Either<L, R> ifRight(Consumer<R> rightConsumer) {
-        rightConsumer.accept(right);
+    public Either<L, R> peekRight(Consumer<R> rightConsumer) {
+        if (isRight())
+            rightConsumer.accept(right);
         return this;
+    }
+
+    public <L1> Either<L1, R> mapLeft(Function<L, L1> leftFunction) {
+        Objects.requireNonNull(leftFunction);
+        return new Either<>(isLeft() ? leftFunction.apply(left): null, right);
+    }
+
+    public <R1> Either<L, R1> mapRight(Function<R, R1> rightFunction) {
+        Objects.requireNonNull(rightFunction);
+        return new Either<>(left, isRight() ? rightFunction.apply(right): null);
     }
 
     public <L1, R1> Either<L1, R1> map(Function<L, L1> leftFunction, Function<R, R1> rightFunction) {
@@ -58,5 +70,16 @@ public class Either<L, R> {
         return isLeft()
                 ? new Either<>(leftFunction.apply(left), null)
                 : new Either<>(null, rightFunction.apply(right));
+    }
+
+    public Either<R, L> swap() {
+        return new Either<>(right, left);
+    }
+
+    public void apply(Consumer<L> leftConsumer, Consumer<R> rightConsumer) {
+        if (isLeft())
+            leftConsumer.accept(left);
+        else
+            rightConsumer.accept(right);
     }
 }

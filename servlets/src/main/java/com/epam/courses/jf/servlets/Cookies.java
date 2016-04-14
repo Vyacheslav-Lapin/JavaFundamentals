@@ -18,6 +18,9 @@ public class Cookies extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.getSession();
+
         ofNullable(request.getParameter("key"))
                 .flatMap(key -> ofNullable(request.getParameter("value"))
                         .map(value -> new Cookie(key, value)))
@@ -32,6 +35,7 @@ public class Cookies extends HttpServlet {
                                     .collect(joining("<br/>")))
                             .orElse("No cookies"));
 
+            //noinspection InjectedReferences
             request.getRequestDispatcher("/cookies/index.html").include(request, response);
         }
     }

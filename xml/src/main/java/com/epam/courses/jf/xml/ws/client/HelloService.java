@@ -36,7 +36,7 @@ public class HelloService extends Service {
         final WebServiceClient webServiceClient = HelloService.class.getAnnotation(WebServiceClient.class);
 
         final URL helloServiceWsdlLocation = take(() -> new URL(webServiceClient.wsdlLocation()))
-                .ifRight(WebServiceException::new)
+                .peekRight(WebServiceException::new)
                 .left();
 
         targetNamespace = webServiceClient.targetNamespace();
