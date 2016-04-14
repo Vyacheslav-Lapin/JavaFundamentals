@@ -1,12 +1,12 @@
 package com.epam.courses.jf.xml.ws;
 
-import com.epam.courses.jf.xml.ws.client.HelloService;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.xml.ws.Endpoint;
 
+import static com.epam.courses.jf.xml.ws.client.HelloService.getHello;
 import static org.junit.Assert.assertEquals;
 
 public class HelloTest {
@@ -25,10 +25,7 @@ public class HelloTest {
 
     @Test
     public void sayHelloRPC() throws Exception {
-        com.epam.courses.jf.xml.ws.client.Hello hello = HelloService.getHello();
-        String text = hello.sayHello("Henry");
-
-        assertEquals("Hello, Henry", text);
+        assertEquals("Hello, Henry", getHello().sayHello("Henry"));
     }
 
     @AfterClass

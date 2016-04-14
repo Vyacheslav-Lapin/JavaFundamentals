@@ -2,21 +2,21 @@ package com.epam.courses.jf.common.functions;
 
 import java.util.function.Supplier;
 
-public interface ExceptionalSupplier<T, E extends Throwable> extends Supplier<Either<T, E>> {
+public interface ExceptionalSupplier<T, E extends Throwable> extends Supplier<ExceptionalEither<T, E>> {
 
     T take() throws E;
 
     @SuppressWarnings("unchecked")
     @Override
-    default Either<T, E> get() {
+    default ExceptionalEither<T, E> get() {
         try {
-            return Either.left(take());
+            return ExceptionalEither.of(take());
         } catch (Throwable e) {
-            return Either.right((E) e);
+            return ExceptionalEither.exception((E) e);
         }
     }
 
-    static <T, E extends Throwable> Either<T, E> take(ExceptionalSupplier<T, E> exceptionalSupplier) {
+    static <T, E extends Throwable> ExceptionalEither<T, E> take(ExceptionalSupplier<T, E> exceptionalSupplier) {
         return exceptionalSupplier.get();
     }
 }

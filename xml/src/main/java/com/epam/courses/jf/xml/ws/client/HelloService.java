@@ -2,8 +2,9 @@ package com.epam.courses.jf.xml.ws.client;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.*;
-import java.net.MalformedURLException;
 import java.net.URL;
+
+import static com.epam.courses.jf.common.functions.ExceptionalSupplier.take;
 
 @WebServiceClient(name = "HelloService",
         targetNamespace = "http://epam.com/courses/jf/xml/ws",
@@ -23,16 +24,14 @@ public class HelloService extends Service {
      */
     @WebEndpoint(name = "HelloPort")
     private Hello getHelloPort(WebServiceFeature... features) {
-        return getPort(new QName(targetNamespace, getLocalPart()), Hello.class, features);
-    }
 
-    private String getLocalPart() {
-        try {
-            return HelloService.class.getDeclaredMethod("getHelloPort", WebServiceFeature[].class)
-                    .getAnnotation(WebEndpoint.class).name();
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+        final String localPart = take(() ->
+                HelloService.class.getDeclaredMethod("getHelloPort", WebServiceFeature[].class))
+                .left()
+                .getAnnotation(WebEndpoint.class)
+                .name();
+
+        return getPort(new QName(targetNamespace, localPart), Hello.class, features);
     }
 
     public static Hello getHello() {
@@ -40,16 +39,12 @@ public class HelloService extends Service {
         final WebServiceClient webServiceClient = HelloService.class.getAnnotation(WebServiceClient.class);
 
         targetNamespace = webServiceClient.targetNamespace();
-        final QName helloServiceQName = new QName(targetNamespace, webServiceClient.name());
-        final URL helloServiceWsdlLocation = getHelloServiceWsdlLocation(webServiceClient.wsdlLocation());
-        return new HelloService(helloServiceWsdlLocation, helloServiceQName).getHelloPort();
-    }
 
-    private static URL getHelloServiceWsdlLocation(String wsdlLocation) {
-        try {
-            return new URL(wsdlLocation);
-        } catch (MalformedURLException ex) {
-            throw new WebServiceException(ex);
-        }
+        final QName helloServiceQName = new QName(targetNamespace, webServiceClient.name());
+
+        final URL helloServiceWsdlLocation = take(() -> new URL(webServiceClient.wsdlLocation()))
+                .getThrows(WebServiceException::new);
+
+        return new HelloService(helloServiceWsdlLocation, helloServiceQName).getHelloPort();
     }
 }

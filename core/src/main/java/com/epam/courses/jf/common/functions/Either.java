@@ -1,85 +1,82 @@
 package com.epam.courses.jf.common.functions;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
+
 public class Either<L, R> {
 
-    private final L left;
-    private final R right;
+    private final L LEFT;
+    private final R RIGHT;
 
-    private Either(L left, R right) {
-        this.left = left;
-        this.right = right;
-    }
-
-    public static <L, R> Either<L, R> right(R right) {
-        return new Either<>(null, right);
+    protected Either(L left, R right) {
+        LEFT = left;
+        RIGHT = right;
     }
 
     public static <L, R> Either<L, R> left(L left) {
         return new Either<>(left, null);
     }
 
-    public L left() {
-        if (isRight())
-            throw new RuntimeException("\"left\" is null");
-        return left;
-    }
-
-    public R right() {
-        if (isLeft())
-            throw new RuntimeException("\"right\" is null");
-        return right;
+    public static <L, R> Either<L, R> right(R right) {
+        return new Either<>(null, right);
     }
 
     public boolean isLeft() {
-        return right == null;
+        return LEFT != null;
     }
 
     public boolean isRight() {
-        return left == null;
+        return RIGHT != null;
     }
 
     public Either<L, R> peekLeft(Consumer<L> leftConsumer) {
-        if (isLeft())
-            leftConsumer.accept(left);
+        if (isLeft()) leftConsumer.accept(LEFT);
         return this;
     }
 
     public Either<L, R> peekRight(Consumer<R> rightConsumer) {
-        if (isRight())
-            rightConsumer.accept(right);
+        if (isRight()) rightConsumer.accept(RIGHT);
         return this;
     }
 
-    public <L1> Either<L1, R> mapLeft(Function<L, L1> leftFunction) {
-        Objects.requireNonNull(leftFunction);
-        return new Either<>(isLeft() ? leftFunction.apply(left): null, right);
+    public Either<L, R> peek(Consumer<L> leftConsumer, Consumer<R> rightConsumer) {
+        if (isLeft())
+            leftConsumer.accept(LEFT);
+        else
+            rightConsumer.accept(RIGHT);
+
+        return this;
     }
 
+    public L left() {
+        requireNonNull(LEFT);
+        return LEFT;
+    }
+
+    public R right() {
+        requireNonNull(RIGHT);
+        return RIGHT;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <L1> Either<L1, R> mapLeft(Function<L, L1> leftFunction) {
+        return isLeft() ? new Either<>(leftFunction.apply(LEFT), null) : (Either<L1, R>) this;
+    }
+
+    @SuppressWarnings("unchecked")
     public <R1> Either<L, R1> mapRight(Function<R, R1> rightFunction) {
-        Objects.requireNonNull(rightFunction);
-        return new Either<>(left, isRight() ? rightFunction.apply(right): null);
+        return isRight() ? new Either<>(null, rightFunction.apply(RIGHT)) : (Either<L, R1>) this;
     }
 
     public <L1, R1> Either<L1, R1> map(Function<L, L1> leftFunction, Function<R, R1> rightFunction) {
-        Objects.requireNonNull(leftFunction);
-        Objects.requireNonNull(rightFunction);
         return isLeft()
-                ? new Either<>(leftFunction.apply(left), null)
-                : new Either<>(null, rightFunction.apply(right));
+                ? new Either<>(leftFunction.apply(LEFT), null)
+                : new Either<>(null, rightFunction.apply(RIGHT));
     }
 
     public Either<R, L> swap() {
-        return new Either<>(right, left);
-    }
-
-    public void apply(Consumer<L> leftConsumer, Consumer<R> rightConsumer) {
-        if (isLeft())
-            leftConsumer.accept(left);
-        else
-            rightConsumer.accept(right);
+        return new Either<>(RIGHT, LEFT);
     }
 }
