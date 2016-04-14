@@ -7,7 +7,8 @@ import org.junit.Test;
 import javax.xml.ws.Endpoint;
 
 import static com.epam.courses.jf.xml.ws.client.HelloService.getHello;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class HelloTest {
 
@@ -20,12 +21,12 @@ public class HelloTest {
 
     @Test
     public void sayHello() throws Exception {
-        assertEquals("Hello, John Doe", new Hello().sayHello("John Doe"));
+        assertThat(new Hello().sayHello("John Doe"), is("Hello, John Doe"));
     }
 
     @Test
     public void sayHelloRPC() throws Exception {
-        assertEquals("Hello, Henry", getHello().sayHello("Henry"));
+        assertThat(getHello().sayHello("Henry"), is("Hello, Henry"));
     }
 
     @AfterClass
