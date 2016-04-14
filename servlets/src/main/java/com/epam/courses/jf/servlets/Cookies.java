@@ -19,14 +19,11 @@ public class Cookies extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.getSession();
-
         ofNullable(request.getParameter("key"))
                 .flatMap(key -> ofNullable(request.getParameter("value"))
                         .map(value -> new Cookie(key, value)))
         .ifPresent(response::addCookie);
 
-//        ((PrintWriter) request.getAttribute("writer"))
         try (PrintWriter out = response.getWriter()) {
             out.println(
                     ofNullable(request.getCookies())

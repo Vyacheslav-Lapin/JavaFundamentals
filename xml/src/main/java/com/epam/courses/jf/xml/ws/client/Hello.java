@@ -13,6 +13,7 @@ public interface Hello {
 
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://epam.com/courses/jf/xml/ws/Hello/sayHelloRequest", output = "http://epam.com/courses/jf/xml/ws/Hello/sayHelloResponse")
-    String sayHello( @WebParam(name = "name", partName = "name") String name);
+    @Action(input = "http://epam.com/courses/jf/xml/ws/Hello/sayHelloRequest",
+            output = "http://epam.com/courses/jf/xml/ws/Hello/sayHelloResponse")
+    String sayHello(@WebParam(name = "name", partName = "name") String name);
 }

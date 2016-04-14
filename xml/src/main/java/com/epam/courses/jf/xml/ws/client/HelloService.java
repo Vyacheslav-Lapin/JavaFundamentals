@@ -2,9 +2,8 @@ package com.epam.courses.jf.xml.ws.client;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.*;
+import java.net.MalformedURLException;
 import java.net.URL;
-
-import static com.epam.courses.jf.common.functions.ExceptionalSupplier.take;
 
 @WebServiceClient(name = "HelloService",
         targetNamespace = "http://epam.com/courses/jf/xml/ws",
@@ -12,38 +11,45 @@ import static com.epam.courses.jf.common.functions.ExceptionalSupplier.take;
 public class HelloService extends Service {
 
     private static String targetNamespace;
-    private static Hello hello;
 
-    private HelloService(java.net.URL wsdlDocumentLocation, QName serviceName, WebServiceFeature... features) {
-        super(wsdlDocumentLocation, serviceName, features);
+    private HelloService(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
+        super(wsdlLocation, serviceName, features);
     }
 
     /**
-     * @param features A list of {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.  Supported features not in the <code>features</code> parameter will have their default values.
-     * @return returns Hello
+     * @param features
+     *     A list of {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.
+     *     Supported features not in the <code>features</code> parameter will have their default values.
      */
     @WebEndpoint(name = "HelloPort")
     private Hello getHelloPort(WebServiceFeature... features) {
+        return getPort(new QName(targetNamespace, getLocalPart()), Hello.class, features);
+    }
 
-        String localPart = take(() -> HelloService.class.getDeclaredMethod("getHelloPort", WebServiceFeature[].class))
-                .map(method -> method.getAnnotation(WebEndpoint.class).name(), e -> e).left();
-
-        return getPort(new QName(targetNamespace, localPart), Hello.class, features);
+    private String getLocalPart() {
+        try {
+            return HelloService.class.getDeclaredMethod("getHelloPort", WebServiceFeature[].class)
+                    .getAnnotation(WebEndpoint.class).name();
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static Hello getHello() {
 
         final WebServiceClient webServiceClient = HelloService.class.getAnnotation(WebServiceClient.class);
 
-        final URL helloServiceWsdlLocation = take(() -> new URL(webServiceClient.wsdlLocation()))
-                .peekRight(WebServiceException::new)
-                .left();
-
         targetNamespace = webServiceClient.targetNamespace();
-
         final QName helloServiceQName = new QName(targetNamespace, webServiceClient.name());
+        final URL helloServiceWsdlLocation = getHelloServiceWsdlLocation(webServiceClient.wsdlLocation());
+        return new HelloService(helloServiceWsdlLocation, helloServiceQName).getHelloPort();
+    }
 
-        return hello != null ? hello
-                : (hello = new HelloService(helloServiceWsdlLocation, helloServiceQName).getHelloPort());
+    private static URL getHelloServiceWsdlLocation(String wsdlLocation) {
+        try {
+            return new URL(wsdlLocation);
+        } catch (MalformedURLException ex) {
+            throw new WebServiceException(ex);
+        }
     }
 }
