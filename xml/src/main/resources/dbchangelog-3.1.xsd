@@ -93,7 +93,7 @@
         </restriction>
     </simpleType>
 
-    <!-- This is the main (root) part of the xsd -->
+    <!-- This is the main (root) part withValue the xsd -->
     <element name="databaseChangeLog">
         <complexType>
             <sequence>

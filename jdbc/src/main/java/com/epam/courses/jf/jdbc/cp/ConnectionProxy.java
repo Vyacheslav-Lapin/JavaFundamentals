@@ -1,6 +1,6 @@
 package com.epam.courses.jf.jdbc.cp;
 
-import com.epam.courses.jf.common.Proxy;
+import com.epam.courses.jf.common.Wrapper;
 
 import java.sql.*;
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.concurrent.Executor;
 //^\s{4}void\s(\w+)\(([^\)]*)\)(\sthrows\s\w+)?;$
 //    default void $1($2)$3{\n        toSrc().$1($2);\n    }
 @FunctionalInterface
-public interface ConnectionProxy extends Connection, Proxy<Connection> {
+public interface ConnectionProxy extends Connection, Wrapper<Connection> {
 
     @Override
     default Statement createStatement() throws SQLException {

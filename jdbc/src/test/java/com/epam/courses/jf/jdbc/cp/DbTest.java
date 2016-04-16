@@ -51,9 +51,9 @@ public class DbTest {
     }
 
     private void testDb(Statement statement) throws SQLException {
-        try (ResultSet rs = statement.executeQuery("SELECT id, name FROM Person")) {
+        try (ResultSet rs = statement.executeQuery("SELECT id, first_name FROM Person")) {
             while (rs.next())
-                System.out.println(rs.getInt("id") + " " + rs.getString("name"));
+                System.out.println(rs.getInt("id") + " " + rs.getString("first_name"));
         }
     }
 }

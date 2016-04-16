@@ -19,15 +19,15 @@ public class HelloService extends Service {
 
     /**
      * @param features
-     *     A list of {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.
+     *     A list withValue {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.
      *     Supported features not in the <code>features</code> parameter will have their default values.
      */
     @WebEndpoint(name = "HelloPort")
     private Hello getHelloPort(WebServiceFeature... features) {
 
-        final String localPart = take(() ->
-                HelloService.class.getDeclaredMethod("getHelloPort", WebServiceFeature[].class))
-                .left()
+        final String localPart =
+                take(() -> HelloService.class.getDeclaredMethod("getHelloPort", WebServiceFeature[].class))
+                        .getOrThrow(RuntimeException::new)
                 .getAnnotation(WebEndpoint.class)
                 .name();
 
@@ -43,7 +43,7 @@ public class HelloService extends Service {
         final QName helloServiceQName = new QName(targetNamespace, webServiceClient.name());
 
         final URL helloServiceWsdlLocation = take(() -> new URL(webServiceClient.wsdlLocation()))
-                .getThrows(WebServiceException::new);
+                .getOrThrow(WebServiceException::new);
 
         return new HelloService(helloServiceWsdlLocation, helloServiceQName).getHelloPort();
     }

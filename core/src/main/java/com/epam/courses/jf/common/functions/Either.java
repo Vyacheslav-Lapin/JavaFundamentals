@@ -76,6 +76,13 @@ public class Either<L, R> {
                 : new Either<>(null, rightFunction.apply(RIGHT));
     }
 
+    public void apply(Consumer<L> leftConsumer, Consumer<R> rightConsumer) {
+        if (isLeft())
+            leftConsumer.accept(LEFT);
+        else
+            rightConsumer.accept(RIGHT);
+    }
+
     public Either<R, L> swap() {
         return new Either<>(RIGHT, LEFT);
     }

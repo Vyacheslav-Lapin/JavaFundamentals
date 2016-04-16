@@ -5,7 +5,7 @@
   this work for additional information regarding copyright ownership.
   The ASF licenses this file to You under the Apache License, Version 2.0
   (the "License"); you may not use this file except in compliance with
-  the License.  You may obtain a copy withValue the License at
+  the License.  You may obtain a copy of the License at
 
       http://www.apache.org/licenses/LICENSE-2.0
 
@@ -23,7 +23,7 @@
 
   <!-- ======================== Introduction ============================== -->
   <!-- This document defines default values for *all* web applications      -->
-  <!-- loaded into this instance withValue Tomcat.  As each application is         -->
+  <!-- loaded into this instance of Tomcat.  As each application is         -->
   <!-- deployed, this file is processed, followed by the                    -->
   <!-- "/WEB-INF/web.xml" deployment descriptor from your own               -->
   <!-- applications.                                                        -->
@@ -55,7 +55,7 @@
   <!--                       is no welcome file in this directory?  [false] -->
   <!--                       WARNING: Listings for directories with many    -->
   <!--                       entries can be slow and may consume            -->
-  <!--                       significant proportions withValue server resources.   -->
+  <!--                       significant proportions of server resources.   -->
   <!--                                                                      -->
   <!--   output              Output buffer size (in bytes) when writing     -->
   <!--                       resources to be served.  [2048]                -->
@@ -88,7 +88,7 @@
   <!--                       relative to the context root. This overrides   -->
   <!--                       globalXsltFile[null]                           -->
   <!--                                                                      -->
-  <!--   globalXsltFile      Site wide configuration version withValue             -->
+  <!--   globalXsltFile      Site wide configuration version of             -->
   <!--                       localXsltFile. This argument must either be an -->
   <!--                       absolute or relative (to either                -->
   <!--                       $CATALINA_BASE/conf or $CATALINA_HOME/conf)    -->
@@ -149,7 +149,7 @@
   <!--                                                                      -->
   <!--   displaySourceFragment                                              -->
   <!--                       Should a source fragment be included in        -->
-  <!--                       withException messages? [true]                     -->
+  <!--                       exception messages? [true]                     -->
   <!--                                                                      -->
   <!--   dumpSmap            Should the SMAP info for JSR45 debugging be    -->
   <!--                       dumped to a file? [false]                      -->
@@ -157,7 +157,7 @@
   <!--                                                                      -->
   <!--   enablePooling       Determines whether tag handler pooling is      -->
   <!--                       enabled. This is a compilation option. It will -->
-  <!--                       not alter the behaviour withValue JSPs that have      -->
+  <!--                       not alter the behaviour of JSPs that have      -->
   <!--                       already been compiled. [true]                  -->
   <!--                                                                      -->
   <!--   engineOptionsClass  Allows specifying the Options class used to    -->
@@ -165,11 +165,11 @@
   <!--                       EmbeddedServletOptions will be used.           -->
   <!--                                                                      -->
   <!--   errorOnUseBeanInvalidClassAttribute                                -->
-  <!--                       Should Jasper issue an error when the value withValue -->
+  <!--                       Should Jasper issue an error when the value of -->
   <!--                       the class attribute in an useBean action is    -->
   <!--                       not a valid bean class?  [true]                -->
   <!--                                                                      -->
-  <!--   fork                Tell Ant to fork compiles withValue JSP pages so that -->
+  <!--   fork                Tell Ant to fork compiles of JSP pages so that -->
   <!--                       a separate JVM is used for JSP page compiles   -->
   <!--                       from the one Tomcat is running in. [true]      -->
   <!--                                                                      -->
@@ -186,22 +186,22 @@
   <!--                       source files. [UTF8]                           -->
   <!--                                                                      -->
   <!--   keepgenerated       Should we keep the generated Java source code  -->
-  <!--                       for each page instead withValue deleting it? [true]   -->
+  <!--                       for each page instead of deleting it? [true]   -->
   <!--                                                                      -->
   <!--   mappedfile          Should we generate static content with one     -->
   <!--                       print statement per input line, to ease        -->
   <!--                       debugging?  [true]                             -->
   <!--                                                                      -->
-  <!--   maxLoadedJsps       The maximum number withValue JSPs that will be loaded -->
+  <!--   maxLoadedJsps       The maximum number of JSPs that will be loaded -->
   <!--                       for a web application. If more than this       -->
-  <!--                       number withValue JSPs are loaded, the least recently  -->
+  <!--                       number of JSPs are loaded, the least recently  -->
   <!--                       used JSPs will be unloaded so that the number  -->
-  <!--                       withValue JSPs loaded at any one time does not exceed -->
-  <!--                       this limit. A value withValue zero or less indicates  -->
+  <!--                       of JSPs loaded at any one time does not exceed -->
+  <!--                       this limit. A value of zero or less indicates  -->
   <!--                       no limit. [-1]                                 -->
   <!--                                                                      -->
-  <!--   jspIdleTimeout      The amount withValue time in seconds a JSP can be     -->
-  <!--                       idle before it is unloaded. A value withValue zero    -->
+  <!--   jspIdleTimeout      The amount of time in seconds a JSP can be     -->
+  <!--                       idle before it is unloaded. A value of zero    -->
   <!--                       or less indicates never unload. [-1]           -->
   <!--                                                                      -->
   <!--   modificationTestInterval                                           -->
@@ -209,7 +209,7 @@
   <!--                       be checked for modification during the         -->
   <!--                       specified time interval (in seconds) from the  -->
   <!--                       last time the JSP was checked for              -->
-  <!--                       modification. A value withValue 0 will cause the JSP  -->
+  <!--                       modification. A value of 0 will cause the JSP  -->
   <!--                       to be checked on every access.                 -->
   <!--                       Used in development mode only. [4]             -->
   <!--                                                                      -->
@@ -225,7 +225,7 @@
   <!--                       compiling JSP pages?  [default work directory  -->
   <!--                       for the current web application]               -->
   <!--                                                                      -->
-  <!--   suppressSmap        Should the generation withValue SMAP info for JSR45   -->
+  <!--   suppressSmap        Should the generation of SMAP info for JSR45   -->
   <!--                       debugging be suppressed?  [false]              -->
   <!--                                                                      -->
   <!--   trimSpaces          Should white spaces in template text between   -->
@@ -236,11 +236,11 @@
   <!--                                                                      -->
   <!--   strictQuoteEscaping When scriptlet expressions are used for        -->
   <!--                       attribute values, should the rules in JSP.1.6  -->
-  <!--                       for the escaping withValue quote characters be        -->
+  <!--                       for the escaping of quote characters be        -->
   <!--                       strictly applied? [true]                       -->
   <!--                                                                      -->
   <!--   quoteAttributeEL    When EL is used in an attribute value on a     -->
-  <!--                       JSP page should the rules for quoting withValue       -->
+  <!--                       JSP page should the rules for quoting of       -->
   <!--                       attributes described in JSP.1.6 be applied to  -->
   <!--                       the expression? [true]                         -->
 
@@ -274,12 +274,12 @@
   <!--   debug               Debugging detail level for messages logged     -->
   <!--                       by this servlet.  [0]                          -->
   <!--                                                                      -->
-  <!--   expires             The number withValue seconds before a page with SSI   -->
+  <!--   expires             The number of seconds before a page with SSI   -->
   <!--                       directives will expire.  [No default]          -->
   <!--                                                                      -->
   <!--   isVirtualWebappRelative                                            -->
   <!--                       Should "virtual" paths be interpreted as       -->
-  <!--                       relative to the context root, instead withValue       -->
+  <!--                       relative to the context root, instead of       -->
   <!--                       the server root? [false]                       -->
   <!--                                                                      -->
   <!--   inputEncoding       The encoding to assume for SSI resources if    -->
@@ -289,7 +289,7 @@
   <!--   outputEncoding      The encoding to use for the page that results  -->
   <!--                       from the SSI processing. [UTF-8]               -->
   <!--                                                                      -->
-  <!--   allowExec           Is use withValue the exec command enabled? [false]    -->
+  <!--   allowExec           Is use of the exec command enabled? [false]    -->
 
 <!--
     <servlet>
@@ -319,7 +319,7 @@
 
 
   <!-- Common Gateway Includes (CGI) processing servlet, which supports     -->
-  <!-- execution withValue external applications that conform to the CGI spec      -->
+  <!-- execution of external applications that conform to the CGI spec      -->
   <!-- requirements.  Typically, this servlet is mapped to the URL pattern  -->
   <!-- "/cgi-bin/*", which means that any CGI applications that are         -->
   <!-- executed must be present within the web application.  This servlet   -->
@@ -334,24 +334,24 @@
   <!--   debug                Debugging detail level for messages logged    -->
   <!--                        by this servlet. Useful values range from 0   -->
   <!--                        to 5 where 0 means no logging and 5 means     -->
-  <!--                        maximum logging. Values withValue 10 or more mean    -->
+  <!--                        maximum logging. Values of 10 or more mean    -->
   <!--                        maximum logging plus debug info added to the  -->
   <!--                        HTTP response. If an error occurs and debug   -->
   <!--                        is 10 or more the standard error page         -->
   <!--                        mechanism will be disabled and a response     -->
   <!--                        body with debug information will be produced. -->
-  <!--                        Note that any value withValue 10 or more has the     -->
-  <!--                        same effect as a value withValue 10. If set to 10 or -->
+  <!--                        Note that any value of 10 or more has the     -->
+  <!--                        same effect as a value of 10. If set to 10 or -->
   <!--                        more the standard error page mechanism will   -->
   <!--                        be disabled and a debug page shown instead.   -->
   <!--                        The debug page is not considered secure and   -->
   <!--                        should not be enabled for production systems. -->
   <!--                        [0]                                           -->
   <!--                                                                      -->
-  <!--   executable           Name withValue the executable used to call the        -->
+  <!--   executable           Name of the executable used to run the        -->
   <!--                        script. [perl]                                -->
   <!--                                                                      -->
-  <!--   parameterEncoding    Name withValue parameter encoding to be used with    -->
+  <!--   parameterEncoding    Name of parameter encoding to be used with    -->
   <!--                        CGI servlet.                                  -->
   <!--                        [System.getProperty("file.encoding","UTF-8")] -->
   <!--                                                                      -->
@@ -359,7 +359,7 @@
   <!--                        any) be passed to the CGI script? [false]     -->
   <!--                                                                      -->
   <!--   stderrTimeout        The time (in milliseconds) to wait for the    -->
-  <!--                        reading withValue stderr to complete before          -->
+  <!--                        reading of stderr to complete before          -->
   <!--                        terminating the CGI process. [2000]           -->
 
 <!--
@@ -443,7 +443,7 @@
   <!--                                                                      -->
   <!--   antiClickJackingOption                                             -->
   <!--                       What value should be used for the header. Must -->
-  <!--                       be one withValue DENY, SAMEORIGIN, ALLOW-FROM         -->
+  <!--                       be one of DENY, SAMEORIGIN, ALLOW-FROM         -->
   <!--                       (case-insensitive). [DENY]                     -->
   <!--                                                                      -->
   <!--   antiClickJackingUri IF ALLOW-FROM is used, what URI should be      -->
@@ -475,7 +475,7 @@
 -->
 
   <!-- A filter that triggers request parameters parsing and rejects the    -->
-  <!-- request if some parameters were skipped because withValue parsing errors or -->
+  <!-- request if some parameters were skipped because of parsing errors or -->
   <!-- request size limitations.                                            -->
 <!--
     <filter>
@@ -497,7 +497,7 @@
   <!-- URL pattern "*.shtml", though it can be mapped to "*" as it will     -->
   <!-- selectively enable/disable SSI processing based on mime types. For   -->
   <!-- this to work you will need to uncomment the .shtml mime type         -->
-  <!-- definition towards the bottom withValue this file.                          -->
+  <!-- definition towards the bottom of this file.                          -->
   <!-- The contentType init param allows you to apply SSI processing to JSP -->
   <!-- pages, javascript, or any other content you wish.  This filter       -->
   <!-- supports the following initialization parameters (default values are -->
@@ -510,15 +510,15 @@
   <!--   debug               Debugging detail level for messages logged     -->
   <!--                       by this servlet.  [0]                          -->
   <!--                                                                      -->
-  <!--   expires             The number withValue seconds before a page with SSI   -->
+  <!--   expires             The number of seconds before a page with SSI   -->
   <!--                       directives will expire.  [No default]          -->
   <!--                                                                      -->
   <!--   isVirtualWebappRelative                                            -->
   <!--                       Should "virtual" paths be interpreted as       -->
-  <!--                       relative to the context root, instead withValue       -->
+  <!--                       relative to the context root, instead of       -->
   <!--                       the server root? [false]                       -->
   <!--                                                                      -->
-  <!--   allowExec           Is use withValue the exec command enabled? [false]    -->
+  <!--   allowExec           Is use of the exec command enabled? [false]    -->
 
 <!--
     <filter>
@@ -4672,12 +4672,12 @@
   <!-- corresponding resource URI for display.                              -->
   <!-- If no welcome files are present, the default servlet either serves a -->
   <!-- directory listing (see default servlet configuration on how to       -->
-  <!-- customize) or returns a 404 status, depending on the value withValue the    -->
+  <!-- customize) or returns a 404 status, depending on the value of the    -->
   <!-- listings setting.                                                    -->
   <!--                                                                      -->
   <!-- If you define welcome files in your own application's web.xml        -->
   <!-- deployment descriptor, that list *replaces* the list configured      -->
-  <!-- here, so be sure to include any withValue the default values that you wish  -->
+  <!-- here, so be sure to include any of the default values that you wish  -->
   <!-- to use within your application.                                       -->
 
     <welcome-file-list>

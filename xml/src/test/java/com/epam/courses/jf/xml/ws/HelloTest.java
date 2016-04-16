@@ -13,10 +13,12 @@ import static org.junit.Assert.assertThat;
 public class HelloTest {
 
     private static Endpoint endpoint;
+    private static com.epam.courses.jf.xml.ws.client.Hello hello;
 
     @BeforeClass
     public static void prepare() {
         endpoint = Endpoint.publish("http://localhost:1212/hello", new Hello());
+        hello = getHello();
     }
 
     @Test
@@ -26,7 +28,7 @@ public class HelloTest {
 
     @Test
     public void sayHelloRPC() throws Exception {
-        assertThat(getHello().sayHello("Henry"), is("Hello, Henry"));
+        assertThat(hello.sayHello("Henry"), is("Hello, Henry"));
     }
 
     @AfterClass

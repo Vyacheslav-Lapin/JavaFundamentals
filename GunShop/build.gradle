@@ -1,0 +1,8 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+dependencies {
+    compile project(":core")
+    compile project(":jdbc")
+    testCompile 'junit:junit:+'
+}

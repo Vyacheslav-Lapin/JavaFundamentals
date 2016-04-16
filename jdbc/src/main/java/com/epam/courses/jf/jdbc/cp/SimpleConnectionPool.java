@@ -48,7 +48,7 @@ class SimpleConnectionPool implements ConnectionPool {
     @Override
     public void close() throws Exception {
         isClosing = true;
-        freeConnections.stream().forEach(connection -> call(connection::close));
+        freeConnections.stream().forEach(connection -> call(connection::close, RuntimeException::new));
     }
 
     private ConnectionProxy wrap(Connection connection) {
