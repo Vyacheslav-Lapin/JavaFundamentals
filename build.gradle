@@ -14,7 +14,7 @@ subprojects {
     }
 
     dependencies {
-        compileOnly 'org.projectlombok:lombok:+'
+        provided "org.projectlombok:lombok:+"
         testCompile 'junit:junit:+'
     }
 

@@ -1,6 +1,7 @@
-package dao;
+package dao.h2;
 
 import com.epam.courses.jf.jdbc.cp.ConnectionPool;
+import dao.interfaces.PersonDAO;
 import model.Person;
 
 import java.sql.Connection;
