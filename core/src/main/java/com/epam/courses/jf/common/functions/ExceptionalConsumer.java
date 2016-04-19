@@ -21,6 +21,10 @@ public interface ExceptionalConsumer<T, E extends Throwable> extends Consumer<T>
         throw new RuntimeException(e);
     }
 
+    static <T, E extends Throwable> Consumer<T> carry(ExceptionalConsumer<T, E> exceptionalConsumer) {
+        return exceptionalConsumer::accept;
+    }
+
     static <T, E extends Throwable> void call(ExceptionalConsumer<T, E> exceptionalConsumer, T param) {
         call(exceptionalConsumer, param, RuntimeException::new);
     }

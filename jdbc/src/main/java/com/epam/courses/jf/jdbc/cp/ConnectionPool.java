@@ -1,14 +1,21 @@
 package com.epam.courses.jf.jdbc.cp;
 
 import com.epam.courses.jf.common.Private;
+import com.epam.courses.jf.common.functions.ExceptionalConsumer;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import static com.epam.courses.jf.common.PropertyUtils.getAndRemove;
 import static com.epam.courses.jf.common.Reflect.loadClass;
@@ -17,6 +24,22 @@ import static java.lang.Integer.parseInt;
 public interface ConnectionPool extends AutoCloseable {
 
     Connection getConnection();
+
+    default void executeScript(String prepareFilePath) {
+        executeScript(Paths.get(prepareFilePath));
+    }
+
+    default void executeScript(Path path) {
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()) {
+            final String[] sqls = Files.lines(path)
+                    .collect(Collectors.joining()).split(";");
+            Arrays.stream(sqls).forEach(ExceptionalConsumer.carry(statement::addBatch));
+            statement.executeBatch();
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     static ConnectionPool create(String propertyFileName) {
         try (InputStream propertyFileInputStream = new FileInputStream(propertyFileName)) {

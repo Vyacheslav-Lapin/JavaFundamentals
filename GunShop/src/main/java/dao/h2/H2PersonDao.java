@@ -1,7 +1,7 @@
 package dao.h2;
 
 import com.epam.courses.jf.jdbc.cp.ConnectionPool;
-import dao.interfaces.PersonDAO;
+import dao.interfaces.PersonDao;
 import model.Person;
 
 import java.sql.Connection;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
 
-public class H2PersonDao implements PersonDAO {
+public class H2PersonDao implements PersonDao {
 
     private ConnectionPool connectionPool;
 
@@ -20,11 +20,12 @@ public class H2PersonDao implements PersonDAO {
 
     @Override
     public Optional<Person> getPersonById(int id) {
-        try (Connection connection = connectionPool.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet rs = statement.executeQuery(
-                     "SELECT first_name, last_name, permission, dob, email, password, address, telephone " +
-                             "FROM Person WHERE id=" + id)) {
+
+        try (final Connection connection = connectionPool.getConnection();
+             final Statement statement = connection.createStatement();
+             final ResultSet rs = statement.executeQuery(
+                     "SELECT first_name, last_name, permission, dob, email, password, address, telephone" +
+                             " FROM Person WHERE id = " + id)) {
             return rs.next()
                     ? Optional.of(new Person(id,
                         rs.getString("first_name"),

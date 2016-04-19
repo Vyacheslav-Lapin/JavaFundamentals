@@ -4,6 +4,6 @@ import model.Person;
 
 import java.util.Optional;
 
-public interface PersonDAO {
+public interface PersonDao {
     Optional<Person> getPersonById(int id);
 }
