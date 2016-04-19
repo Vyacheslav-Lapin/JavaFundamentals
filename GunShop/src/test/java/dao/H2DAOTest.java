@@ -1,23 +1,17 @@
 package dao;
 
-import com.epam.courses.jf.common.functions.ExceptionalConsumer;
 import com.epam.courses.jf.jdbc.cp.ConnectionPool;
 import dao.h2.H2GunDao;
+import dao.h2.H2InstanceDao;
 import dao.h2.H2PersonDao;
 import dao.interfaces.GunDao;
-import dao.interfaces.PersonDAO;
+import dao.interfaces.InstanceDao;
+import dao.interfaces.PersonDao;
 import model.Gun;
+import model.Instance;
 import model.Person;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -28,43 +22,41 @@ public class H2DaoTest {
     private static final String DB_PROPERTIES_FILE_NAME = "db.properties";
     private static final String DB_PREPARE_FILE_NAME = "h2.sql";
     private static ConnectionPool connectionPool;
-
-    private static PersonDAO personDAO;
+    private static PersonDao personDao;
     private static GunDao gunDao;
-
+    private static InstanceDao instanceDao;
 
     @BeforeClass
     public static void prepare() throws Exception {
-
-        final Path path = Paths.get(RESOURCES_FILE_PATH, DB_PREPARE_FILE_NAME);
-        final String[] sqls = Files.lines(path)
-                .collect(Collectors.joining()).split(";");
-
         connectionPool = ConnectionPool.create(RESOURCES_FILE_PATH + DB_PROPERTIES_FILE_NAME);
-        personDAO = new H2PersonDao(connectionPool);
-        gunDao = new H2GunDao(connectionPool);
+        connectionPool.executeScript(RESOURCES_FILE_PATH + DB_PREPARE_FILE_NAME);
 
-        try (final Connection connection = connectionPool.getConnection();
-             final Statement statement = connection.createStatement()) {
-            Arrays.stream(sqls).forEach((ExceptionalConsumer<String, ?>) statement::addBatch);
-            statement.executeBatch();
-        }
+        personDao = new H2PersonDao(connectionPool);
+        gunDao = new H2GunDao(connectionPool);
+        instanceDao = new H2InstanceDao(connectionPool);
     }
 
     @Test
     public void getPersonById() throws Exception {
-        final Person person = personDAO.getPersonById(1)
-                .orElseThrow(() -> new AssertionError("Person with id 1 not finded!"));
+        final Person person = personDao.getPersonById(1)
+                .orElseThrow(() -> new RuntimeException("There is no such Person with id = " + 1));
+
         assertThat(person.getEmail(), is("Jose_Eglesias@mail.es"));
-        System.out.println(person);
     }
 
     @Test
-    public void getGunById() throws Exception {
+    public void getGunById() {
         final Gun gun = gunDao.getGunById(1)
-                .orElseThrow(() -> new AssertionError("Gun with id 1 not found!"));
+                .orElseThrow(() -> new RuntimeException("There is no such Gun with id = " + 1));
+
         assertThat(gun.getName(), is("Kolt"));
-        System.out.println(gun);
     }
 
+    @Test
+    public void getInstanceById() {
+        final Instance instance = instanceDao.getInstanceById(1)
+                .orElseThrow(() -> new RuntimeException("There is no such Instance with id = " + 1));
+
+        assertThat(instance.getModel().getName(), is("Kolt"));
+    }
 }
