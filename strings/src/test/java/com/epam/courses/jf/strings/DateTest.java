@@ -1,5 +1,6 @@
 package com.epam.courses.jf.strings;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.text.DateFormat;
@@ -41,6 +42,7 @@ public class DateTest {
     }
 
     @Test
+    @Ignore
     public void exampleFromJavaOne2008() {
         // Example from JavaOne 2008
         Date date = new Date(107, 11, 13, 16, 40);

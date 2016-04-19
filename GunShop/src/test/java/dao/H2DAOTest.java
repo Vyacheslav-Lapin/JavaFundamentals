@@ -2,6 +2,10 @@ package dao;
 
 import com.epam.courses.jf.common.functions.ExceptionalConsumer;
 import com.epam.courses.jf.jdbc.cp.ConnectionPool;
+import dao.h2.H2GunDao;
+import dao.h2.H2PersonDao;
+import dao.interfaces.GunDao;
+import dao.interfaces.PersonDAO;
 import model.Gun;
 import model.Person;
 import org.junit.BeforeClass;

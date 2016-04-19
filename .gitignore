@@ -1,6 +1,7 @@
 # IntelliJ project files #
 .idea
 classes
+out
 build
 *.class
 
