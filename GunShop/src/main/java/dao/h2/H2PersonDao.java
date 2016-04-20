@@ -41,4 +41,18 @@ public class H2PersonDao implements PersonDao {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public Optional<String> getPasswordByEmail(String email) {
+        try (final Connection connection = connectionPool.getConnection();
+             final Statement statement = connection.createStatement();
+             final ResultSet rs = statement.executeQuery(
+                     "SELECT password FROM Person WHERE email = '" + email + "'")) {
+            return rs.next()
+                    ? Optional.of(rs.getString("password"))
+                    : Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

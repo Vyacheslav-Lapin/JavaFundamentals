@@ -4,8 +4,7 @@ import com.epam.courses.jf.jdbc.cp.ConnectionPool;
 import dao.h2.H2GunDao;
 import dao.h2.H2InstanceDao;
 import dao.h2.H2PersonDao;
-import dao.interfaces.GunDao;
-import dao.interfaces.InstanceDao;
+import service.PersonService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -22,10 +21,9 @@ public class DaoProvider implements ServletContextListener {
     public static final String PERSON_DAO = "personDao";
     public static final String GUN_DAO = "gunDao";
     public static final String INSTANCE_DAO = "instanceDao";
+    public static final String PERSON_SERVICE = "personService";
 
     private static ConnectionPool connectionPool;
-    private static GunDao gunDao;
-    private static InstanceDao instanceDao;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -38,7 +36,9 @@ public class DaoProvider implements ServletContextListener {
         connectionPool = ConnectionPool.create(dbPropertiesFilePath);
         connectionPool.executeScript(dbPrepareFilePath);
 
-        servletContext.setAttribute(PERSON_DAO, new H2PersonDao(connectionPool));
+        final H2PersonDao personDao = new H2PersonDao(connectionPool);
+        servletContext.setAttribute(PERSON_DAO, personDao);
+        servletContext.setAttribute(PERSON_SERVICE, new PersonService(personDao));
         servletContext.setAttribute(GUN_DAO, new H2GunDao(connectionPool));
         servletContext.setAttribute(INSTANCE_DAO, new H2InstanceDao(connectionPool));
     }

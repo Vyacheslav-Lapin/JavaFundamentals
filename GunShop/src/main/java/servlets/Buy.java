@@ -17,6 +17,7 @@ import static listeners.DaoProvider.GUN_DAO;
 @WebServlet("/buy")
 public class Buy extends HttpServlet{
 
+    public static final String GUN = "gun";
     private GunDao gunDao;
 
     @Override
@@ -29,7 +30,7 @@ public class Buy extends HttpServlet{
         final int id = parseInt(request.getParameter("id"));
         final Gun gun = gunDao.getGunById(id).orElseThrow(RuntimeException::new);
 
-        request.setAttribute("gun", gun);
+        request.setAttribute(GUN, gun);
 
         request.getRequestDispatcher("/buy/index.jsp").forward(request, response);
     }

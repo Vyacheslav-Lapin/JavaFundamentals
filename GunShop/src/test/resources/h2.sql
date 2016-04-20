@@ -4,7 +4,7 @@ CREATE TABLE Person (
   last_name  VARCHAR(255),
   permission BOOLEAN         DEFAULT FALSE,
   dob        DATE,
-  email      VARCHAR(255) NOT NULL,
+  email      VARCHAR(255) NOT NULL UNIQUE,
   password   VARCHAR(255) NOT NULL,
   address    VARCHAR(255),
   telephone  VARCHAR(15)

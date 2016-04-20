@@ -20,4 +20,8 @@ public class Person {
     private String password;
     private String address;
     private String telephone;
+
+    public Person(String login, String password) {
+        this(0, "", "", false, null, login, password, "", "");
+    }
 }

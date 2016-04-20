@@ -22,7 +22,7 @@ public interface ExceptionalConsumer<T, E extends Throwable> extends Consumer<T>
     }
 
     static <T, E extends Throwable> Consumer<T> carry(ExceptionalConsumer<T, E> exceptionalConsumer) {
-        return exceptionalConsumer::accept;
+        return exceptionalConsumer;
     }
 
     static <T, E extends Throwable> void call(ExceptionalConsumer<T, E> exceptionalConsumer, T param) {
