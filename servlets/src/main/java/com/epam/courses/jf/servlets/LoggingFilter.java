@@ -1,7 +1,7 @@
 package com.epam.courses.jf.servlets;
 
-import com.epam.courses.jf.servlets.common.HttpFilter;
-import com.epam.courses.jf.servlets.common.Logger;
+import com.epam.courses.jf.common.servlets.HttpFilter;
+import com.epam.courses.jf.common.servlets.Logger;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;

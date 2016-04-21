@@ -1,4 +1,4 @@
-package com.epam.courses.jf.servlets.common;
+package com.epam.courses.jf.common.servlets;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

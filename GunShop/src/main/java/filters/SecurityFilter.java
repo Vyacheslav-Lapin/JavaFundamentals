@@ -1,7 +1,7 @@
 package filters;
 
 
-import com.epam.courses.jf.servlets.common.HttpFilter;
+import com.epam.courses.jf.common.servlets.HttpFilter;
 import model.Person;
 import service.SecurityService;
 
@@ -20,7 +20,7 @@ import static listeners.DaoProvider.SECURITY_SERVICE;
 @WebFilter("/*")
 public class SecurityFilter implements HttpFilter {
 
-    public static final String PERSON = "person";
+    private static final String PERSON = "person";
     private SecurityService securityService;
 
     @Override
@@ -42,10 +42,8 @@ public class SecurityFilter implements HttpFilter {
             if (personOptional.isPresent()) {
                 session.setAttribute(PERSON, personOptional.get());
                 chain.doFilter(request, response);
-            } else {
-                response.sendRedirect("login.html");
-            }
-
+            } else
+                request.getRequestDispatcher("login.html").forward(request, response);
         }
     }
 }

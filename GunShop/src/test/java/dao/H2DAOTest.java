@@ -21,14 +21,14 @@ public class H2DaoTest {
     private static final String RESOURCES_FILE_PATH = "src/test/resources/";
     private static final String DB_PROPERTIES_FILE_NAME = "db.properties";
     private static final String DB_PREPARE_FILE_NAME = "h2.sql";
-    private static ConnectionPool connectionPool;
     private static PersonDao personDao;
     private static GunDao gunDao;
     private static InstanceDao instanceDao;
 
     @BeforeClass
     public static void prepare() throws Exception {
-        connectionPool = ConnectionPool.create(RESOURCES_FILE_PATH + DB_PROPERTIES_FILE_NAME);
+        ConnectionPool connectionPool =
+                ConnectionPool.create(RESOURCES_FILE_PATH + DB_PROPERTIES_FILE_NAME);
         connectionPool.executeScript(RESOURCES_FILE_PATH + DB_PREPARE_FILE_NAME);
 
         personDao = new H2PersonDao(connectionPool);

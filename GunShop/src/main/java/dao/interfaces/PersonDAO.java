@@ -6,4 +6,7 @@ import java.util.Optional;
 
 public interface PersonDao {
     Optional<Person> getPersonById(int id);
+    Optional<String> getPasswordByEmail(String email);
+    boolean setPasswordByEmail(String userName, String pwdHash);
+    Optional<Person> getPersonByEmail(String email);
 }
