@@ -4,7 +4,7 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.*;
 import java.net.URL;
 
-import static com.epam.courses.jf.common.functions.ExceptionalSupplier.take;
+import static com.epam.courses.jf.common.functions.ExceptionalSupplier.call;
 
 @WebServiceClient(name = "HelloService",
         targetNamespace = "http://epam.com/courses/jf/xml/ws",
@@ -26,7 +26,7 @@ public class HelloService extends Service {
     private Hello getHelloPort(WebServiceFeature... features) {
 
         final String localPart =
-                take(() -> HelloService.class.getDeclaredMethod("getHelloPort", WebServiceFeature[].class))
+                call(() -> HelloService.class.getDeclaredMethod("getHelloPort", WebServiceFeature[].class))
                         .getOrThrow(RuntimeException::new)
                 .getAnnotation(WebEndpoint.class)
                 .name();
@@ -42,7 +42,7 @@ public class HelloService extends Service {
 
         final QName helloServiceQName = new QName(targetNamespace, webServiceClient.name());
 
-        final URL helloServiceWsdlLocation = take(() -> new URL(webServiceClient.wsdlLocation()))
+        final URL helloServiceWsdlLocation = call(() -> new URL(webServiceClient.wsdlLocation()))
                 .getOrThrow(WebServiceException::new);
 
         return new HelloService(helloServiceWsdlLocation, helloServiceQName).getHelloPort();

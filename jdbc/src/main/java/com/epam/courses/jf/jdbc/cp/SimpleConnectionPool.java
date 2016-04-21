@@ -66,7 +66,7 @@ class SimpleConnectionPool implements ConnectionPool {
                 if (connection.isReadOnly())
                     toSrc().setReadOnly(false);
 
-                if (reservedConnections.contains(connection) && !reservedConnections.remove(connection))
+                if (reservedConnections.contains(this) && !reservedConnections.remove(this))
                     throw new RuntimeException("Error deleting connection from the given away connections pool.");
 
                 if (isClosing)

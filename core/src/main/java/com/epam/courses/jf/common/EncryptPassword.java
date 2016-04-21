@@ -1,4 +1,4 @@
-package crypto;
+package com.epam.courses.jf.common;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,12 +23,13 @@ public class EncryptPassword {
 
         StringBuilder stringBuilder = new StringBuilder();
 
+        String hexVal;
+
         //hex encode the digest
-        for (int i = 0; i < bs.length; i++) {
-            String hexVal = Integer.toHexString(0xFF & bs[i]);
-            if (hexVal.length() == 1) {
+        for (byte b : bs) {
+            hexVal = Integer.toHexString(0xFF & b);
+            if (hexVal.length() == 1)
                 stringBuilder.append("0");
-            }
             stringBuilder.append(hexVal);
         }
 
