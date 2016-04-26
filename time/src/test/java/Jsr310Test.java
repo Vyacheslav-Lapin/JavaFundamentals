@@ -3,6 +3,7 @@ import com.epam.courses.jf.time.QuarterOfYearQuery;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.nio.file.attribute.FileTime;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.Format;
@@ -87,6 +88,13 @@ public class Jsr310Test {
         final ZoneId zoneId = ZoneId.of("America/New_York");
         final TimeZone timeZone = TimeZone.getTimeZone(zoneId);
         assertThat(timeZone.toZoneId(), is(zoneId));
+    }
+
+    @Test
+    public void FileTime2InstantTransform() {
+        final Instant instant = Instant.now();
+        final FileTime fileTime = FileTime.from(instant);
+        assertThat(fileTime.toInstant(), is(instant));
     }
 
     @Test

@@ -4,12 +4,8 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+@Data
 @AllArgsConstructor
-@NoArgsConstructor(force = true)
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
 public class Person {
     private final int id;
     private String firstName;

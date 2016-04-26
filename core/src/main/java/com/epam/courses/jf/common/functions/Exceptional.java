@@ -2,6 +2,7 @@ package com.epam.courses.jf.common.functions;
 
 import com.epam.courses.jf.common.Wrapper;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @FunctionalInterface
@@ -45,5 +46,9 @@ public interface Exceptional<T, E extends Throwable> extends Wrapper<Either<T, E
     static <T, E extends Throwable> Exceptional<T, E> withException(E exception) {
         Either<T, E> right = Either.right(exception);
         return () -> right;
+    }
+
+    default Optional<T> toOptional() {
+        return Optional.ofNullable(toSrc().left());
     }
 }
