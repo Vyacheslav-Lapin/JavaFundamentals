@@ -185,7 +185,7 @@
   <!--   javaEncoding        Java file encoding to use for generating java  -->
   <!--                       source files. [UTF8]                           -->
   <!--                                                                      -->
-  <!--   keepgenerated       Should we keep the generated Java source code  -->
+  <!--   keepgenerated       Should we keep the generated Java source value  -->
   <!--                       for each page instead withValue deleting it? [true]   -->
   <!--                                                                      -->
   <!--   mappedfile          Should we generate static content with one     -->

@@ -20,7 +20,7 @@ public class SpecialJSPTag extends TagSupport {
                     + "<table style=\"border: 1px solid #000;\"><tr><td>"
                     + set.elements().collect(Collectors.joining("</td></tr><tr><td>"))
                     + "</td></tr></table>");
-        }catch(IOException e){
+        } catch(IOException e){
             throw new JspException(e.getMessage());
         }
         return SKIP_BODY;

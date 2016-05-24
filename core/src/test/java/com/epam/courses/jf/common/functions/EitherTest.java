@@ -15,8 +15,6 @@ public class EitherTest {
                 .forEach(either -> either.apply(
                         left -> System.out.println("received left value: " + left.substring(11)),
                         right -> System.out.println("received right value: 0x" + Integer.toHexString(right))
-                ))
-        ;
+                ));
     }
-
 }

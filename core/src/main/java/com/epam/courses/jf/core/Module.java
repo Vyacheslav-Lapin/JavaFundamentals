@@ -10,7 +10,7 @@ import static com.epam.courses.jf.core.Platform.JavaSE;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PACKAGE)
 public @interface Module {
-    int code();
+    int value();
 
     String title() default ""; // last package part by default
 

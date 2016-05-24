@@ -20,7 +20,7 @@ public class HelloService extends Service {
     /**
      * @param features
      *     A list withValue {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.
-     *     Supported features not in the <code>features</code> parameter will have their default values.
+     *     Supported features not in the <value>features</value> parameter will have their default values.
      */
     @WebEndpoint(name = "HelloPort")
     private Hello getHelloPort(WebServiceFeature... features) {

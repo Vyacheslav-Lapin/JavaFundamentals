@@ -1,24 +1,19 @@
-apply plugin: "idea"
-apply plugin: "eclipse"
-
 subprojects {
+    group 'ru.vlapin'
+    version '1.0-SNAPSHOT'
+
     apply plugin: "java"
 
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        compile 'org.projectlombok:lombok:+'
-        compile 'org.slf4j:slf4j-api:+'
         compile 'ch.qos.logback:logback-classic:+'
+        compileOnly 'org.projectlombok:lombok:+'
         testCompile 'junit:junit:+'
     }
-
-    version = "1.0-SNAPSHOT"
 }

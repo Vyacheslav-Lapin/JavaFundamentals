@@ -32,6 +32,7 @@ public class Buy extends HttpServlet{
 
         request.setAttribute(GUN, gun);
 
+        //noinspection InjectedReferences
         request.getRequestDispatcher("/buy/index.jsp").forward(request, response);
     }
 }
