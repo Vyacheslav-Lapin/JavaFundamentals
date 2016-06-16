@@ -2,6 +2,7 @@ package dao.h2;
 
 import com.epam.courses.jf.jdbc.cp.ConnectionPool;
 import dao.interfaces.GunDao;
+import lombok.Value;
 import model.Gun;
 
 import java.sql.Connection;
@@ -9,46 +10,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 
+@Value
 public class H2GunDao implements GunDao {
 
-    private ConnectionPool connectionPool;
-
-    public H2GunDao(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
-    }
+    ConnectionPool connectionPool;
 
     @Override
     public Optional<Gun> getGunById(int id) {
-        try (final Connection connection = connectionPool.getConnection();
-             final Statement statement = connection.createStatement();
-             final ResultSet rs = statement.executeQuery(
-                     "SELECT name, caliber FROM Gun WHERE id = " + id)) {
-
-            return rs.next()
-                    ? Optional.of(new Gun(id, rs.getString("name"), rs.getDouble("caliber")))
-                    : Optional.empty();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return executeQuery(
+                "SELECT name, caliber FROM Gun WHERE id = " + id,
+                rs -> !rs.next() ? null : new Gun(id, rs.getString("name"), rs.getDouble("caliber"))
+        ).toOptional();
     }
 
     @Override
     public Collection<Gun> getAll() {
-        Collection<Gun> guns = new HashSet<>();
-
-        try (final Connection connection = connectionPool.getConnection();
-             final Statement statement = connection.createStatement();
-             final ResultSet rs = statement.executeQuery("SELECT id, name, caliber FROM Gun")) {
-
-            while (rs.next())
-                    guns.add(new Gun(rs.getInt("id"), rs.getString("name"), rs.getDouble("caliber")));
-
-            return guns;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return queryCollection(
+                "SELECT id, name, caliber FROM Gun",
+                rs -> new Gun(rs.getInt("id"), rs.getString("name"), rs.getDouble("caliber"))
+        ).toOptional()
+                .orElse(Collections.emptySet());
     }
 }

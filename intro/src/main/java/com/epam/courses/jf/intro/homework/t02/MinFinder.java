@@ -23,13 +23,13 @@ public class MinFinder {
         return a < e;
     }
 
-    private double findMin() {
+    private int findMin() {
         double a;
 
         for (int index = 1;; index++) {
             a = getA(index);
             if (filter(a)) {
-                return a;
+                return index;
             } else {
                 out.println(a);
             }
@@ -37,6 +37,6 @@ public class MinFinder {
     }
 
     public static void main(String[] args) {
-        out.println("Минимальное значение: " + findMin(0.1));
+        out.println("Минимальный индекс: " + findMin(0.1));
     }
 }

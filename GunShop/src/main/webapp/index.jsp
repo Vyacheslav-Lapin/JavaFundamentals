@@ -14,15 +14,13 @@
           <th style="border: 1px solid #000;">Название модели</th>
           <th style="border: 1px solid #000;">Калибр</th>
       </tr>
-      <%  GunDao gunDao = (GunDao) application.getAttribute(GUN_DAO);
-          for (Gun gun : gunDao.getAll()) {
-
-      %>
-      <tr>
-        <td style="border: 1px solid #000;"><a href="/buy?id=<%=gun.getId()%>"><%=gun.getName()%></a></td>
-        <td style="border: 1px solid #000;"><%=gun.getCaliber()%></td>
-      </tr>
-      <%}%>
+      <% GunDao gunDao = (GunDao) application.getAttribute(GUN_DAO);
+          for (Gun gun : gunDao.getAll()) {%>
+          <tr>
+            <td style="border: 1px solid #000;"><a href="/buy?id=<%=gun.getId()%>"><%=gun.getName()%></a></td>
+            <td style="border: 1px solid #000;"><%=gun.getCaliber()%></td>
+          </tr>
+      <% }%>
   </table>
 
   </body>
