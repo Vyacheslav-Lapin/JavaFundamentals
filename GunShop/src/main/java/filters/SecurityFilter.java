@@ -39,11 +39,12 @@ public class SecurityFilter implements HttpFilter {
                     .flatMap(userName -> Optional.ofNullable(request.getParameter("j_password"))
                             .flatMap(password -> securityService.checkAndGetPerson(userName, password))
                     );
-            if (personOptional.isPresent()) {
-                session.setAttribute(PERSON, personOptional.get());
+            if (personOptional.isPresent())
                 chain.doFilter(request, response);
-            } else
-                request.getRequestDispatcher("login.html").forward(request, response);
+            else {
+                request.setAttribute("requestedUrl", request.getRequestURI());
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
         }
     }
 }

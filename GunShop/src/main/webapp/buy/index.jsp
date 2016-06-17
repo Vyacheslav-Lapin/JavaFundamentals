@@ -1,19 +1,15 @@
-<%@ page import="static servlets.Buy.GUN" %>
-<%@ page import="model.Gun" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    final Gun gun = (Gun) request.getAttribute(GUN);
-%>
+<jsp:useBean id="gun" type="model.Gun" scope="request"/>
 <html>
 <head>
-    <title>Gun <%=gun.getName()%></title>
+    <title>Gun ${gun.name}</title>
 </head>
 <body>
 
-<h1>Gun <%=gun.getName()%></h1>
+<h1>Gun ${gun.name}</h1>
 
-Название: <%=gun.getName()%><br/>
-Калибр: <%=gun.getCaliber()%>
+Название: ${gun.name}<br/>
+Калибр: ${gun.caliber}
 
 </body>
 </html>

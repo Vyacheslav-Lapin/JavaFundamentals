@@ -1,4 +1,4 @@
-package dao.interfaces;
+package com.epam.courses.jf.jdbc.common;
 
 import com.epam.courses.jf.common.functions.Exceptional;
 import com.epam.courses.jf.common.functions.ExceptionalFunction;

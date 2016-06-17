@@ -4,7 +4,6 @@ apply plugin: 'war'
 dependencies {
     compile project(":core")
     compile project(":jdbc")
-//    compile project(":servlets")
 
     compile 'javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:+'
     compile 'org.glassfish.web:javax.servlet.jsp.jstl:+'

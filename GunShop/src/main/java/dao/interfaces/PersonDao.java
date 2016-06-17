@@ -1,5 +1,6 @@
 package dao.interfaces;
 
+import com.epam.courses.jf.jdbc.common.Dao;
 import model.Person;
 
 import java.util.Optional;
