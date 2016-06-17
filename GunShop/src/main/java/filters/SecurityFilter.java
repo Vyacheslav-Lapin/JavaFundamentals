@@ -21,6 +21,7 @@ import static listeners.DaoProvider.SECURITY_SERVICE;
 public class SecurityFilter implements HttpFilter {
 
     private static final String PERSON = "person";
+    public static final String REQUESTED_URL = "requestedUrl";
     private SecurityService securityService;
 
     @Override
@@ -39,10 +40,11 @@ public class SecurityFilter implements HttpFilter {
                     .flatMap(userName -> Optional.ofNullable(request.getParameter("j_password"))
                             .flatMap(password -> securityService.checkAndGetPerson(userName, password))
                     );
-            if (personOptional.isPresent())
+            if (personOptional.isPresent()) {
+                session.setAttribute(PERSON, personOptional.get());
                 chain.doFilter(request, response);
-            else {
-                request.setAttribute("requestedUrl", request.getRequestURI());
+            } else {
+                request.setAttribute(REQUESTED_URL, request.getRequestURI());
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
         }
