@@ -8,6 +8,8 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.HashSet;
 
+import static java.lang.Character.toUpperCase;
+
 public interface Dao {
 
     ConnectionPool getConnectionPool();
@@ -60,11 +62,29 @@ public interface Dao {
         return withStatement(statement -> {
             Collection<T> result;
             try (final ResultSet rs = statement.executeQuery(sql)) {
-                result = new HashSet<T>(rs.getFetchSize());
+                result = new HashSet<>(rs.getFetchSize());
                 while (rs.next())
                     result.add(template.get(rs));
                 return result;
             }
         });
+    }
+
+    static String toSqlName(String name) {
+        return name.replaceAll("([A-Z])", "_$1").toLowerCase();
+    }
+
+    static String toCamelCaseName(String name) {
+        boolean isFirstString = true;
+        StringBuilder result = new StringBuilder();
+        for (String string: name.split("_"))
+            if (isFirstString) {
+                result.append(string);
+                isFirstString = false;
+            } else
+                result.append(toUpperCase(string.charAt(0)))
+                    .append(string.substring(1));
+
+        return result.toString();
     }
 }
