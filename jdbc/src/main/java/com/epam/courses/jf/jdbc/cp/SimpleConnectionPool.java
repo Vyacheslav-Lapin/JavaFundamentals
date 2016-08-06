@@ -7,7 +7,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-import static com.epam.courses.jf.common.functions.ExceptionalRunnable.call;
+import static com.epam.courses.jf.common.functions.ExceptionalRunnable.run;
 
 /**
  * Default ConnectionPool, instantiated by {@link ConnectionPool#create(String)} static method
@@ -48,7 +48,7 @@ class SimpleConnectionPool implements ConnectionPool {
     @Override
     public void close() throws Exception {
         isClosing = true;
-        freeConnections.stream().forEach(connection -> call(connection::close, RuntimeException::new));
+        freeConnections.stream().forEach(connection -> run(connection::close, RuntimeException::new));
     }
 
     private ConnectionProxy wrap(Connection connection) {

@@ -34,7 +34,7 @@ public interface ConnectionPool extends AutoCloseable {
              Statement statement = connection.createStatement()) {
             final String[] sqls = Files.lines(path)
                     .collect(Collectors.joining()).split(";");
-            Arrays.stream(sqls).forEach(ExceptionalConsumer.carry(statement::addBatch));
+            Arrays.stream(sqls).forEach(ExceptionalConsumer.toUncheckedConsumer(statement::addBatch));
             statement.executeBatch();
         } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
