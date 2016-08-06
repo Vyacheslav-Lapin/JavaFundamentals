@@ -4,7 +4,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@Value
 @AllArgsConstructor
 public class Person {
     private final int id;

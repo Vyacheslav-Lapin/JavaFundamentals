@@ -12,6 +12,16 @@ public interface Exceptional<T, E extends Throwable> extends Wrapper<Either<T, E
         return () -> either;
     }
 
+    static <T, E extends Throwable> Exceptional<T, E> withValue(T value) {
+        Either<T, E> left = Either.left(value);
+        return () -> left;
+    }
+
+    static <T, E extends Throwable> Exceptional<T, E> withException(E exception) {
+        Either<T, E> right = Either.right(exception);
+        return () -> right;
+    }
+
     default <T1> Exceptional<T1, E> mapValue(Function<T, T1> valueTransformer) {
         return wrap(toSrc().mapLeft(valueTransformer));
     }
@@ -27,28 +37,21 @@ public interface Exceptional<T, E extends Throwable> extends Wrapper<Either<T, E
 
     default T getOrThrow() throws E {
         final Either<T, E> either = toSrc();
-        if (either.isLeft()) {
+        if (either.isLeft())
             return either.left();
-        } else {
+        else
             throw either.right();
-        }
     }
 
+    default <E1 extends Throwable> T getOrThrowUnchecked() throws E1 {
+        return getOrThrow(RuntimeException::new);
+    }
+    
     default <E1 extends Throwable> T getOrThrow(Function<E, E1> exceptionMapper) throws E1 {
         return mapException(exceptionMapper).getOrThrow();
     }
 
-    static <T, E extends Throwable> Exceptional<T, E> withValue(T value) {
-        Either<T, E> left = Either.left(value);
-        return () -> left;
-    }
-
-    static <T, E extends Throwable> Exceptional<T, E> withException(E exception) {
-        Either<T, E> right = Either.right(exception);
-        return () -> right;
-    }
-
     default Optional<T> toOptional() {
-        return Optional.ofNullable(toSrc().left());
+        return toSrc().optionalLeft();
     }
 }

@@ -2,14 +2,20 @@ package com.epam.courses.jf.jdbc.common;
 
 import com.epam.courses.jf.common.functions.Exceptional;
 import com.epam.courses.jf.common.functions.ExceptionalFunction;
+import com.epam.courses.jf.common.functions.VarFunction;
 import com.epam.courses.jf.jdbc.cp.ConnectionPool;
 
+import java.lang.reflect.Executable;
+import java.lang.reflect.Parameter;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 import static java.lang.Character.toUpperCase;
 
+@FunctionalInterface
 public interface Dao {
 
     ConnectionPool getConnectionPool();
@@ -75,16 +81,51 @@ public interface Dao {
     }
 
     static String toCamelCaseName(String name) {
-        boolean isFirstString = true;
+        return toCamelCaseName(name, true);
+    }
+
+    static String toCamelCaseName(String name, boolean isFirstCharLower) {
         StringBuilder result = new StringBuilder();
-        for (String string: name.split("_"))
-            if (isFirstString) {
+        for (String string : name.split("_"))
+            if (isFirstCharLower) {
                 result.append(string);
-                isFirstString = false;
+                isFirstCharLower = false;
             } else
                 result.append(toUpperCase(string.charAt(0)))
-                    .append(string.substring(1));
+                        .append(string.substring(1));
 
         return result.toString();
+    }
+
+    static  <T> T getById(Class<T> aClass, int id) {
+        return null;
+    }
+
+    static <C> String toSelect(Class<C> aClass) {
+        return toSelect(aClass.getConstructors()[0]); // TODO: 30/06/16 get max-args constructor!
+    }
+
+    static String toSelect(Executable executable) {
+        StringBuilder result = new StringBuilder("select ");
+
+        result.append(
+                Arrays.stream(executable.getParameters())
+                        .filter(parameter -> !parameter.isSynthetic())
+                        .map(Parameter::getName)
+                        .map(Dao::toSqlName)
+                        .collect(Collectors.joining(", ")));
+
+        result.append(" from ")
+                .append(executable.getDeclaringClass().getSimpleName());
+
+        return result.toString();
+    }
+
+    static <T> T toSelect(Class<T> aClass, int id) {
+        return null;
+    }
+
+    static <R, T> R toSelect(VarFunction<R, T> generator) {
+        return null;
     }
 }

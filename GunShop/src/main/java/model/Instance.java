@@ -2,7 +2,7 @@ package model;
 
 import lombok.*;
 
-@Data
+@Value
 public class Instance {
     private final int id;
     private final Gun model;

@@ -17,8 +17,21 @@ public interface ExceptionalFunction<T, R, E extends Throwable> extends Function
         }
     }
 
-    static <T, R, E extends Throwable> Exceptional<R, E> getOrThrow(ExceptionalFunction<T, R, E> exceptionalFunction,
-                                                                    T param) {
-        return exceptionalFunction.apply(param);
+    default R getOrThrowUnchecked(T param) {
+        return apply(param).getOrThrowUnchecked();
+    }
+
+    static <T, R, E extends Throwable> R getOrThrowUnchecked(ExceptionalFunction<T, R, E> exceptionalFunction,
+                                                             T param) {
+        return exceptionalFunction.apply(param).getOrThrowUnchecked();
+    }
+
+    static <T, R, E extends Throwable> Function<T, R> toUncheckedFunction(ExceptionalFunction<T, R, E> exceptionalFunction) {
+        return t -> getOrThrowUnchecked(exceptionalFunction, t);
+    }
+
+    static <T, R, E extends Exception> ExceptionalSupplier<R, E> carry(ExceptionalFunction<T, R, E> exceptionalFunction,
+                                                                       T param) {
+        return () -> exceptionalFunction.get(param);
     }
 }

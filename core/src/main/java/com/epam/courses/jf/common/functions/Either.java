@@ -1,9 +1,8 @@
 package com.epam.courses.jf.common.functions;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import static java.util.Objects.requireNonNull;
 
 public class Either<L, R> {
 
@@ -51,12 +50,12 @@ public class Either<L, R> {
     }
 
     public L left() {
-        requireNonNull(LEFT);
+//        requireNonNull(LEFT);
         return LEFT;
     }
 
     public R right() {
-        requireNonNull(RIGHT);
+//        requireNonNull(RIGHT);
         return RIGHT;
     }
 
@@ -85,5 +84,13 @@ public class Either<L, R> {
 
     public Either<R, L> swap() {
         return new Either<>(RIGHT, LEFT);
+    }
+
+    public Optional<L> optionalLeft() {
+        return Optional.ofNullable(LEFT);
+    }
+
+    public Optional<R> optionalRight() {
+        return Optional.ofNullable(RIGHT);
     }
 }

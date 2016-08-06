@@ -8,11 +8,11 @@ public interface ExceptionalConsumer<T, E extends Throwable> extends Consumer<T>
     void call(T t) throws E;
 
     @Override
-    @SuppressWarnings("unchecked")
     default void accept(T t) {
         try {
             call(t);
         } catch (Throwable e) {
+            //noinspection unchecked
             ifThrowable((E) e);
         }
     }
@@ -21,10 +21,11 @@ public interface ExceptionalConsumer<T, E extends Throwable> extends Consumer<T>
         throw new RuntimeException(e);
     }
 
-    static <T, E extends Throwable> Consumer<T> carry(ExceptionalConsumer<T, E> exceptionalConsumer) {
+    static <T, E extends Throwable> Consumer<T> toUncheckedConsumer(ExceptionalConsumer<T, E> exceptionalConsumer) {
         return exceptionalConsumer;
     }
 
+    @SuppressWarnings("unused")
     static <T, E extends Throwable> void call(ExceptionalConsumer<T, E> exceptionalConsumer, T param) {
         call(exceptionalConsumer, param, RuntimeException::new);
     }
