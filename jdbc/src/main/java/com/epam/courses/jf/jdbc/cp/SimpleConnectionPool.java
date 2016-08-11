@@ -1,13 +1,13 @@
 package com.epam.courses.jf.jdbc.cp;
 
+import com.epam.courses.jf.common.functions.ExceptionalRunnable;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
-
-import static com.epam.courses.jf.common.functions.ExceptionalRunnable.run;
 
 /**
  * Default ConnectionPool, instantiated by {@link ConnectionPool#create(String)} static method
@@ -48,7 +48,7 @@ class SimpleConnectionPool implements ConnectionPool {
     @Override
     public void close() throws Exception {
         isClosing = true;
-        freeConnections.stream().forEach(connection -> run(connection::close, RuntimeException::new));
+        freeConnections.forEach(connection -> ExceptionalRunnable.run(connection::close));
     }
 
     private ConnectionProxy wrap(Connection connection) {

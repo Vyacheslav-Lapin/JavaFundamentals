@@ -2,11 +2,11 @@ package com.epam.courses.jf.common;
 
 import org.junit.Test;
 
-import static com.epam.courses.jf.common.EncryptPassword.encryptPassword;
+import static com.epam.courses.jf.common.StringEncryptUtil.encryptPassword;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class EncryptPasswordTest {
+public class StringEncryptUtilTest {
 
     @Test
     public void heffelfingerWasRight() {
