@@ -1,15 +1,20 @@
 package com.epam.courses.jf.common.functions;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class Either<L, R> {
+public final class Either<L, R> {
 
     private final L LEFT;
     private final R RIGHT;
 
-    protected Either(L left, R right) {
+    private Either(L left, R right) {
+        if (left == null) {
+            Objects.requireNonNull(right, "Either should not be empty.");
+        }
+
         LEFT = left;
         RIGHT = right;
     }
@@ -61,18 +66,18 @@ public class Either<L, R> {
 
     @SuppressWarnings("unchecked")
     public <L1> Either<L1, R> mapLeft(Function<L, L1> leftFunction) {
-        return isLeft() ? new Either<>(leftFunction.apply(LEFT), null) : (Either<L1, R>) this;
+        return isLeft() ? left(leftFunction.apply(LEFT)) : (Either<L1, R>) this;
     }
 
     @SuppressWarnings("unchecked")
     public <R1> Either<L, R1> mapRight(Function<R, R1> rightFunction) {
-        return isRight() ? new Either<>(null, rightFunction.apply(RIGHT)) : (Either<L, R1>) this;
+        return isRight() ? right(rightFunction.apply(RIGHT)) : (Either<L, R1>) this;
     }
 
     public <L1, R1> Either<L1, R1> map(Function<L, L1> leftFunction, Function<R, R1> rightFunction) {
         return isLeft()
-                ? new Either<>(leftFunction.apply(LEFT), null)
-                : new Either<>(null, rightFunction.apply(RIGHT));
+                ? left(leftFunction.apply(LEFT))
+                : right(rightFunction.apply(RIGHT));
     }
 
     public void apply(Consumer<L> leftConsumer, Consumer<R> rightConsumer) {
@@ -92,5 +97,11 @@ public class Either<L, R> {
 
     public Optional<R> optionalRight() {
         return Optional.ofNullable(RIGHT);
+    }
+
+    public <T> T fold(Function<L, T> leftFunction, Function<R, T> rightFunction) {
+        return isLeft()
+                ? leftFunction.apply(LEFT)
+                : rightFunction.apply(RIGHT);
     }
 }
