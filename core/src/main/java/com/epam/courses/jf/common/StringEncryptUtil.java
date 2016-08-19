@@ -7,14 +7,14 @@ import java.security.MessageDigest;
 public class StringEncryptUtil {
 
     private static final String ALGORITHM = "MD5";
-    private static final MessageDigest ENCRIPTOR =
+    private static final MessageDigest ENCRYPTOR =
             ExceptionalFunction.getOrThrowUnchecked(MessageDigest::getInstance, ALGORITHM);
 
-    public static String encryptPassword(String password) {
+    public static String encrypt(String s) {
 
-        ENCRIPTOR.reset();
+        ENCRYPTOR.reset();
 
-        byte[] bs = ENCRIPTOR.digest(password.getBytes());
+        byte[] bs = ENCRYPTOR.digest(s.getBytes());
 
         StringBuilder stringBuilder = new StringBuilder();
 

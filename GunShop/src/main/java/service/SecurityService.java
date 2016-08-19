@@ -21,10 +21,10 @@ public class SecurityService {
         if (passwordByEmail.isPresent()) {
             String pwdHash = passwordByEmail.get();
             if (pwdHash.length() != 32) {
-                pwdHash = StringEncryptUtil.encryptPassword(pwdHash);
+                pwdHash = StringEncryptUtil.encrypt(pwdHash);
                 personDao.setPasswordByEmail(userName, pwdHash);
             }
-            return StringEncryptUtil.encryptPassword(password).equals(pwdHash)
+            return StringEncryptUtil.encrypt(password).equals(pwdHash)
                     ? personDao.getPersonByEmail(userName)
                     : Optional.empty();
         } else
