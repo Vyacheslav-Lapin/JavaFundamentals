@@ -1,4 +1,5 @@
-import languages.ProgrammingLanguage;
+package languages;
+
 import org.junit.Test;
 
 import java.util.List;
