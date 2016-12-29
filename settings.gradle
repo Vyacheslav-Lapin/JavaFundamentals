@@ -13,4 +13,6 @@ include 'core',
         'servlets',
         'jsp',
         'time',
-        'GunShop'
+        'GunShop',
+        'nashorn'
+

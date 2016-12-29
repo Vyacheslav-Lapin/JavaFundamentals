@@ -182,10 +182,10 @@
   <!--                       Explorer when using <jsp:plugin> tags.         -->
   <!--                       [clsid:8AD9C840-044E-11D1-B3E9-00805F499D93]   -->
   <!--                                                                      -->
-  <!--   javaEncoding        Java file encoding to use for generating java  -->
+  <!--   javaEncoding    languages.JavaJava file encoding to use for generating java  -->
   <!--                       source files. [UTF8]                           -->
   <!--                                                                      -->
-  <!--   keepgenerated       Should we keep the generated Java source value  -->
+  <!--   keepgenerated       Should we keep the generalanguages.JavaJava source value  -->
   <!--                       for each page instead withValue deleting it? [true]   -->
   <!--                                                                      -->
   <!--   mappedfile          Should we generate static content with one     -->

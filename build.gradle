@@ -13,7 +13,9 @@ subprojects {
 
     dependencies {
         compile 'ch.qos.logback:logback-classic:+'
-        compileOnly 'org.projectlombok:lombok:+'
-        testCompile 'junit:junit:+'
+        compileOnly 'org.projectlombok:lombok:+',
+                'edu.washington.cs.types.checker:checker-framework:+'
+        testCompile 'junit:junit:+',
+                'org.junit.platform:junit-platform-commons:+'
     }
 }
