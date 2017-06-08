@@ -1,90 +1,90 @@
 package com.epam.courses.jf.jdbc.cp;
 
-import com.epam.courses.jf.common.Private;
-import com.epam.courses.jf.common.functions.ExceptionalConsumer;
+import com.hegel.core.Private;
+import com.hegel.core.functions.ExceptionalBiFunction;
+import com.hegel.core.functions.ExceptionalConsumer;
+import com.hegel.properties.PropertyMap;
+import com.hegel.reflect.Reflect;
+import javaslang.CheckedFunction1;
+import javaslang.Function1;
+import lombok.SneakyThrows;
+import lombok.val;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static com.epam.courses.jf.common.PropertyUtils.getAndRemove;
-import static com.epam.courses.jf.common.Reflect.loadClass;
 import static java.lang.Integer.parseInt;
 
-public interface ConnectionPool extends AutoCloseable {
+public interface ConnectionPool extends Supplier<Connection>, AutoCloseable {
 
-    Connection getConnection();
-
-    default void executeScript(String prepareFilePath) {
-        executeScript(Paths.get(prepareFilePath));
+    default void executeScripts(String... prepareFilePaths) {
+        executeScripts(Arrays.stream(prepareFilePaths).map(Paths::get));
     }
 
-    default void executeScript(Path path) {
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
-            final String[] sqls = Files.lines(path)
-                    .collect(Collectors.joining()).split(";");
-            Arrays.stream(sqls).forEach(ExceptionalConsumer.toUncheckedConsumer(statement::addBatch));
+    default void executeScripts(Path... paths) {
+        executeScripts(Arrays.stream(paths));
+    }
+
+    @Private
+    Function1<Path, Stream<String>> UNCHECKED_FILES_LINES =
+            CheckedFunction1.<Path, Stream<String>>lift(Files::lines)
+                    .andThen(streams -> streams.getOrElseThrow(RuntimeException::new));
+
+    @SneakyThrows
+    default void executeScripts(Stream<Path> paths) {
+        try (val connection = get();
+             val statement = connection.createStatement()) {
+
+//            Runnable runnable = () -> System.out.println("kjhs");
+
+//            Function0.of((Function0<Void>) runnable::run);
+
+//          Function1<String, Try<Void>> addBatch1 = CheckedFunction1.<String, Void>liftTry(statement::addBatch);
+//          Function1<String, Void> addBatch2 = addBatch1.andThen(voids -> voids.getOrElseThrow(RuntimeException::new));
+            Consumer<String> addBatch =
+                    ExceptionalConsumer.toUncheckedConsumer(statement::addBatch);
+
+            paths.flatMap(path -> Arrays.stream(UNCHECKED_FILES_LINES.apply(path)
+                    .collect(Collectors.joining())
+                    .split(";"))
+            ).forEach(addBatch);
+
             statement.executeBatch();
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
+    @SneakyThrows
     static ConnectionPool create(String propertyFileName) {
-        try (InputStream propertyFileInputStream = new FileInputStream(propertyFileName)) {
-            return create(propertyFileInputStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    @Private
-    static ConnectionPool create(InputStream propertyFileInputStream) {
-        final Properties properties = new Properties();
-        try {
-            properties.load(propertyFileInputStream);
-            return create(properties);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+        val propertyMap = PropertyMap.fromFile(propertyFileName);
 
-    @Private
-    static ConnectionPool create(Properties properties) {
-        assert properties.containsKey("url");
-        assert properties.containsKey("poolSize");
-        return create(getAndRemove(properties, "url"),
-                parseInt(getAndRemove(properties, "poolSize")),
-                properties);
+        assert propertyMap.containsKey("url");
+        assert propertyMap.containsKey("poolSize");
+        assert propertyMap.containsKey("driver");
+
+        Reflect.loadClass(propertyMap.remove("driver"), "Can't find database driver class");
+
+        return create(propertyMap.remove("url"),
+                parseInt(propertyMap.remove("poolSize")),
+                propertyMap.toProperties());
     }
 
     @Private
     static ConnectionPool create(String url, int poolSize, Properties properties) {
         assert properties.containsKey("user");
         assert properties.containsKey("password");
-        assert properties.containsKey("driver");
+        assert properties.size() == 2;
 
-        loadClass(getAndRemove(properties, "driver"), "Can't find database driver class");
-        return new SimpleConnectionPool(poolSize, () -> createConnection(url, properties));
-    }
-
-    @Private
-    static Connection createConnection(String url, Properties properties) {
-        try {
-            return DriverManager.getConnection(url, properties);
-        } catch (SQLException e) {
-            throw new RuntimeException("SQLException in ConnectionPoolFactory", e);
-        }
+        return new SimpleConnectionPool(poolSize,
+                ExceptionalBiFunction.supplyUnchecked(DriverManager::getConnection, url, properties));
     }
 }

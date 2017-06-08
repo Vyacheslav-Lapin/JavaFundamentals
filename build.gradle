@@ -2,20 +2,45 @@ subprojects {
     group 'ru.vlapin'
     version '1.0-SNAPSHOT'
 
-    apply plugin: "java"
+    apply plugin: 'java'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
     repositories {
+//        maven { url 'http://repo.spring.io/libs-milestone' }
+//        maven { url 'http://repo.spring.io/libs-release' }
+        mavenLocal()
         mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' }
     }
 
+    configurations {
+        testCompile.extendsFrom compileOnly
+    }
+
+    // this turns logging on in tests:
+    test.testLogging.showStandardStreams = true
+
     dependencies {
-        compile 'ch.qos.logback:logback-classic:+'
+
+        compile 'org.apache.logging.log4j:log4j-api:+',
+                'org.apache.logging.log4j:log4j-core:+',
+//                'ch.qos.logback:logback-classic:+',
+                'io.vavr:vavr:+',
+                'com.aol.simplereact:cyclops-react:+'
+                'com.github.Vyacheslav-Lapin:Hegel:master-SNAPSHOT' //https://github.com/Vyacheslav-Lapin/Hegel.git
+
         compileOnly 'org.projectlombok:lombok:+',
                 'edu.washington.cs.types.checker:checker-framework:+'
-        testCompile 'junit:junit:+',
-                'org.junit.platform:junit-platform-commons:+'
+
+        testCompile 'org.junit.jupiter:junit-jupiter-api:+',
+//                'org.spockframework:spock-core:1.0-groovy-2.4',
+                'org.hamcrest:java-hamcrest:+'
     }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
 }

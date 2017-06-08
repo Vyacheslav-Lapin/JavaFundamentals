@@ -1,0 +1,5 @@
+dependencies {
+    compile project(":core"),
+            'com.h2database:h2:+',
+            'org.jooq:jooq:+'
+}

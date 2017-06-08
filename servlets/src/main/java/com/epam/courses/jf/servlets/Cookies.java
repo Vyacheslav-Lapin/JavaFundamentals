@@ -22,7 +22,7 @@ public class Cookies extends HttpServlet {
         ofNullable(request.getParameter("key"))
                 .flatMap(key -> ofNullable(request.getParameter("value"))
                         .map(value -> new Cookie(key, value)))
-        .ifPresent(response::addCookie);
+                .ifPresent(response::addCookie);
 
         try (PrintWriter out = response.getWriter()) {
             out.println(
@@ -33,7 +33,8 @@ public class Cookies extends HttpServlet {
                             .orElse("No cookies"));
 
             //noinspection InjectedReferences
-            request.getRequestDispatcher("/cookies/index.html").include(request, response);
+            request.getRequestDispatcher("/cookies/index.html")
+                    .include(request, response);
         }
     }
 

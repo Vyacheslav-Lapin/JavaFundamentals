@@ -1,21 +1,19 @@
 package com.epam.courses.jf.intro.homework.t02;
 
-import org.hamcrest.core.Is;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.epam.courses.jf.intro.homework.t02.MinFinder.findMin;
 import static java.lang.System.out;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MinFinderTest {
+class MinFinderTest {
 
     @Test
-    public void testFindMin() throws Exception {
+    void testFindMin() throws Exception {
 
         double min = findMin(0.1);
         out.println("Минимальный индекс: " + min);
 
-        assertThat(min, Is.is(3.0));
+        assertEquals(3.0, min);
     }
 }

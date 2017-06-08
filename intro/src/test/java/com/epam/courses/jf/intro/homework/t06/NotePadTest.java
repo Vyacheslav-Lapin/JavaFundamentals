@@ -1,31 +1,34 @@
 package com.epam.courses.jf.intro.homework.t06;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NotePadTest {
+class NotePadTest {
 
     NotePad notePad = new NotePad();
 
     @Test
-    public void writeNote() {
+    void writeNote() {
         assertNotNull(notePad.addNote("Title", "Body"));
     }
 
     @Test
-    public void createNotes() {
+    void createNotes() {
         fill(100_000);
     }
 
     private void fill(int capacity) {
         for (int i = 0; i < capacity; i++)
-            assertEquals(notePad.addNote("Title " + i, "Body" + i).getId(), i);
+            assertEquals(
+                    notePad.addNote("Title " + i, "Body" + i)
+                            .getId(),
+                    i);
     }
 
     @Test
-    public void printNotes() {
+    void printNotes() {
 
         fill(50);
 
@@ -34,13 +37,14 @@ public class NotePadTest {
     }
 
     @Test
-    public void editNote() {
+    void editNote() {
         Note note = notePad.addNote("Title", "Body");
 
         assertEquals(note, notePad.getNote(note.getId()));
 
         assertEquals(
-                note.setBody("Another body").setTitle("Another title"),
+                note.setBody("Another body")
+                        .setTitle("Another title"),
                 notePad.getNote(note.getId()));
     }
 }

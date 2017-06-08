@@ -1,9 +1,9 @@
 package com.epam.courses.jf.jdbc.common;
 
-import com.epam.courses.jf.common.functions.Exceptional;
-import com.epam.courses.jf.common.functions.ExceptionalFunction;
-import com.epam.courses.jf.common.functions.VarFunction;
-import com.epam.courses.jf.jdbc.cp.ConnectionPool;
+import com.hegel.core.functions.Exceptional;
+import com.hegel.core.functions.ExceptionalFunction;
+import com.hegel.core.functions.VarFunction;
+import lombok.val;
 
 import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
@@ -11,18 +11,17 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.lang.Character.toUpperCase;
 
 @FunctionalInterface
-public interface Dao {
-
-    ConnectionPool getConnectionPool();
+public interface Dao extends Supplier<Connection> {
 
     default <T> Exceptional<T, SQLException> withConnection(
             ExceptionalFunction<Connection, T, SQLException> jdbcTemplate) {
-        try (final Connection connection = getConnectionPool().getConnection()) {
+        try (val connection = get()) {
             return jdbcTemplate.apply(connection);
         } catch (SQLException e) {
             return Exceptional.withException(e);
@@ -32,7 +31,7 @@ public interface Dao {
     default <T> Exceptional<T, SQLException> withStatement(
             ExceptionalFunction<Statement, T, SQLException> jdbcTemplate) {
         return withConnection(connection -> {
-            try (final Statement statement = connection.createStatement()) {
+            try (val statement = connection.createStatement()) {
                 return jdbcTemplate.get(statement);
             }
         });
@@ -41,7 +40,7 @@ public interface Dao {
     default <T> Exceptional<T, SQLException> withPreparedStatement(
             ExceptionalFunction<PreparedStatement, T, SQLException> jdbcTemplate, String sql) {
         return withConnection(connection -> {
-            try (final PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (val statement = connection.prepareStatement(sql)) {
                 return jdbcTemplate.get(statement);
             }
         });
@@ -50,7 +49,7 @@ public interface Dao {
     default <T> Exceptional<T, SQLException> withCallableStatement(
             ExceptionalFunction<CallableStatement, T, SQLException> jdbcTemplate, String call) {
         return withConnection(connection -> {
-            try (final CallableStatement callableStatement = connection.prepareCall(call)) {
+            try (val callableStatement = connection.prepareCall(call)) {
                 return jdbcTemplate.get(callableStatement);
             }
         });
@@ -58,7 +57,7 @@ public interface Dao {
 
     default <T> Exceptional<T, SQLException> executeQuery(String sql, ExceptionalFunction<ResultSet, T, SQLException> template) {
         return withStatement(statement -> {
-            try (final ResultSet rs = statement.executeQuery(sql)) {
+            try (val rs = statement.executeQuery(sql)) {
                 return template.get(rs);
             }
         });

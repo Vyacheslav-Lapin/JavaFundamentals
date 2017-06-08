@@ -1,7 +1,7 @@
 package wsclient;
 
-import com.epam.courses.jf.common.functions.ExceptionalBiFunction;
-import com.epam.courses.jf.common.functions.ExceptionalFunction;
+import com.hegel.core.functions.ExceptionalBiFunction;
+import com.hegel.core.functions.ExceptionalFunction;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;

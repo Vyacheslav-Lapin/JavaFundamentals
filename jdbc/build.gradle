@@ -1,4 +1,7 @@
 dependencies {
     compile project(":core")
-    compile 'com.h2database:h2:+'
+    compile 'com.h2database:h2:+',
+            'com.hegel:hegel-core:1.0-SNAPSHOT',
+            'com.hegel:hegel-properties:1.0-SNAPSHOT',
+            'com.hegel:hegel-reflect:1.0-SNAPSHOT'
 }

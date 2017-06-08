@@ -1,5 +1,8 @@
 package com.epam.courses.jf.intro.homework.t03;
 
+import lombok.experimental.var;
+import lombok.val;
+
 import static java.lang.Math.floor;
 import static java.lang.Math.tan;
 
@@ -20,11 +23,11 @@ public class Table {
 
     public double[][] getTable() {
 
-        int length = (int) floor((end - start) / step) + 1;
-        double result[][] = new double[length][],
-                x = start;
+        val length = (int) floor((end - start) / step) + 1;
+        val result = new double[length][];
+        var x = start;
 
-        for (int index = 0; index < length; index++, x += step)
+        for (var index = 0; index < length; index++, x += step)
             result[index] = getDataAndResultPair(x);
 
         return result;

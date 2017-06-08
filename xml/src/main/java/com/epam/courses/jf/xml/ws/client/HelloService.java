@@ -1,10 +1,10 @@
 package com.epam.courses.jf.xml.ws.client;
 
+import com.hegel.core.functions.ExceptionalSupplier;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.*;
 import java.net.URL;
-
-import static com.epam.courses.jf.common.functions.ExceptionalSupplier.call;
 
 @WebServiceClient(name = "HelloService",
         targetNamespace = "http://epam.com/courses/jf/xml/ws",
@@ -26,7 +26,7 @@ public class HelloService extends Service {
     private Hello getHelloPort(WebServiceFeature... features) {
 
         final String localPart =
-                call(() -> HelloService.class.getDeclaredMethod("getHelloPort", WebServiceFeature[].class))
+                ExceptionalSupplier.call(() -> HelloService.class.getDeclaredMethod("getHelloPort", WebServiceFeature[].class))
                         .getOrThrow(RuntimeException::new)
                 .getAnnotation(WebEndpoint.class)
                 .name();

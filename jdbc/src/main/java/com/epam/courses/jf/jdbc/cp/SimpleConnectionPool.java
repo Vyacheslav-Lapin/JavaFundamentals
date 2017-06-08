@@ -1,6 +1,7 @@
 package com.epam.courses.jf.jdbc.cp;
 
-import com.epam.courses.jf.common.functions.ExceptionalRunnable;
+import com.hegel.core.functions.ExceptionalRunnable;
+import lombok.SneakyThrows;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -32,17 +33,15 @@ class SimpleConnectionPool implements ConnectionPool {
     }
 
     @Override
-    public Connection getConnection() {
+    @SneakyThrows
+    public Connection get() {
 
-        if (isClosing) throw new RuntimeException("Trying to get connection from closed pool!");
+        if (isClosing)
+            throw new RuntimeException("Trying to get connection from closed pool!");
 
-        try {
-            final Connection connection = freeConnections.take();
-            reservedConnections.add(connection);
-            return connection;
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        final Connection connection = freeConnections.take();
+        reservedConnections.add(connection);
+        return connection;
     }
 
     @Override
@@ -54,7 +53,7 @@ class SimpleConnectionPool implements ConnectionPool {
     private ConnectionProxy wrap(Connection connection) {
         return new ConnectionProxy() {
             @Override
-            public Connection toSrc() {
+            public Connection get() {
                 return connection;
             }
 
@@ -64,15 +63,15 @@ class SimpleConnectionPool implements ConnectionPool {
                     throw new SQLException("Attempting to close closed connection.");
 
                 if (connection.isReadOnly())
-                    toSrc().setReadOnly(false);
+                    get().setReadOnly(false);
 
                 if (reservedConnections.contains(this) && !reservedConnections.remove(this))
                     throw new RuntimeException("Error deleting connection from the given away connections pool.");
 
                 if (isClosing)
-                    toSrc().close();
-                else if (!freeConnections.offer(toSrc()))
-                        throw new RuntimeException("Error allocating connection in the pool.");
+                    get().close();
+                else if (!freeConnections.offer(get()))
+                    throw new RuntimeException("Error allocating connection in the pool.");
             }
         };
     }

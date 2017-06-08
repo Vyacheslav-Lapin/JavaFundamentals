@@ -5,10 +5,9 @@ dependencies {
     compile project(":jdbc")
 
     compile 'javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:+',
-            'org.glassfish.web:javax.servlet.jsp.jstl:+'
+            'org.glassfish.web:javax.servlet.jsp.jstl:+',
+            'com.hegel:hegel-web:1.0-SNAPSHOT'
 
     providedCompile 'org.apache.tomcat:tomcat-api:+',
             'org.apache.tomcat:tomcat-jsp-api:+'
-
-    testCompile 'junit:junit:+'
 }

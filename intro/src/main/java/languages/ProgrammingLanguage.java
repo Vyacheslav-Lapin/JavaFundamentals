@@ -314,7 +314,7 @@ public interface ProgrammingLanguage {
                 () -> "Janus (concurrent constraint programming language)",
                 () -> "Janus (time-reversible computing programming language)",
                 () -> "JASS",
-                () -> "languages.Java",
+                () -> "Java",
                 () -> "JavaScript",
                 () -> "JCL",
                 () -> "JEAN",

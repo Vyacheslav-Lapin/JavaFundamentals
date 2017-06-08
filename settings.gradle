@@ -14,5 +14,12 @@ include 'core',
         'jsp',
         'time',
         'GunShop',
-        'nashorn'
-
+        'nashorn',
+        'javaslang',
+        'jhipster',
+        'lombok',
+        'algorithms',
+        'presentation',
+        'jooq',
+        'logging',
+        'reflection'

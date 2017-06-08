@@ -1,0 +1,1108 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <title>reveal.js</title>
+
+    <!--<link rel="stylesheet" href="/css/custom.css"/>-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/white.css"/>
+
+    <!-- Theme used for syntax highlighting of code -->
+    <!--<link rel="stylesheet" href="/lib/css/github-gist.css"/>-->
+    <!--<link rel="stylesheet" href="/path/to/styles/default.css">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/9.9.0/styles/idea.min.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        const link = Object.assign(document.createElement('link'), {
+            rel: 'stylesheet',
+            type: 'text/css',
+            href: `https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/${location.search.match(/print-pdf/gi) ? 'pdf' : 'paper'}.css`
+        });
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+
+    <link rel="stylesheet" href="/css/custom.css"/>
+
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h3>Введение в язык Java. Быстрый старт</h3>
+                </div>
+                <p>Как из кода на Java получить работающую программу?</p>
+                <div class="fragment">
+                    <p>src\First.java</p>
+                    <pre><code data-trim class="java">
+                        public class First {
+                            public static void main(String[] args) {
+                                System.out.println("Java уже здесь!");
+                            }
+                        }
+                    </code></pre>
+                </div>
+                <pre class="fragment"><code data-trim class="sh">
+                    > javac -d bin src\First.java
+                </code></pre>
+                <div class="fragment">
+                    <p>bin\First.class</p>
+                    <pre><code data-trim>
+                    00000000: cafe babe 0000 0034 001d 0a00 0600 0f09  .......4........
+                    00000010: 0010 0011 0800 120a 0013 0014 0700 1507  ................
+                    00000020: 0016 0100 063c 696e 6974 3e01 0003 2829  .....&lt;init>...()
+                    00000030: 5601 0004 436f 6465 0100 0f4c 696e 654e  V...Code...LineN
+                    00000040: 756d 6265 7254 6162 6c65 0100 046d 6169  umberTable...mai
+                    00000050: 6e01 0016 285b 4c6a 6176 612f 6c61 6e67  n...([Ljava/lang
+                    00000060: 2f53 7472 696e 673b 2956 0100 0a53 6f75  /String;)V...Sou
+                    ...
+                </code></pre>
+                </div>
+                <pre class="fragment"><code data-trim class="sh">
+                    > java -cp .\bin First
+                    Java уже здесь!
+                </code></pre>
+
+                <aside class="notes">
+                    Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you
+                    open the speaker notes window (hit 's' on your keyboard).
+                </aside>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Введение в язык Java. Быстрый старт</h3>
+                </div>
+                <p>Усложняем задачу: как из одного Java-класса обратиться к другому?</p>
+                <div>
+                    <p>src\AboutJava.java</p>
+                    <pre><code data-trim class="java">
+                        public class AboutJava {
+                            public void printReleaseData(){
+                                System.out.println("Java уже здесь!");
+                            }
+                        }
+                    </code></pre>
+                </div>
+                <div>
+                    <p>src\MainClass.java</p>
+                    <pre><code data-trim class="java">
+                        public class MainClass {
+                            public static void main(String[] args) {
+                                AboutJava object = new AboutJava();
+                                object.printReleaseData();
+                            }
+                        }
+                    </code></pre>
+                </div>
+                <pre class="fragment"><code data-trim data-noescape class="sh">
+                    > javac -d bin <mark>–cp src</mark> src/MainClass.java
+                </code></pre>
+                <pre class="fragment"><code data-trim class="sh">
+                    > java -cp bin MainClass
+                    Java уже здесь!
+                </code></pre>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Введение в язык Java. Быстрый старт</h3>
+                </div>
+                <p>Как пользователю передать данные в программу?</p>
+                <pre><code data-trim class="java">
+                    public class CommandArg {
+                        public static void main(String[] args) {
+                            for(int i = 0; i < args.length; i++){
+                                System.out.println("Аргумент " + i + " = " + args[i]);
+                            }
+                        }
+                    }
+                </code></pre>
+
+                <pre class="fragment"><code data-trim data-noescape class="sh">
+                    > java CommandArg <mark>first second 23 56.2 23,9</mark>
+                </code></pre>
+                <pre class="fragment"><code data-trim class="sh">
+                    Аргумент 0 = first
+                    Аргумент 1 = second
+                    Аргумент 2 = 23
+                    Аргумент 3 = 56.2
+                    Аргумент 4 = 23,9
+                </code></pre>
+            </section>
+        </section>
+        <section>
+            <div class="slide-header">
+                <h3>Введение в язык Java. Быстрый старт</h3>
+            </div>
+
+            <p>Как быть, если нужно назвать 2 разных класса одинаковым именем?</p>
+            <pre><code data-trim class="java">
+                    public class Table {
+                        ...
+                    }
+                </code></pre>
+
+            <div class="stretch">
+                <img src="media/table1.jpeg" align="left"/><img src="media/table2.jpeg" align="right"/>
+            </div>
+        </section>
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h4>Операторы. Операторы отношения и логические операторы</h4>
+                </div>
+
+                <p class="header">Операторы отношения</p>
+                <p>Применяются для сравнения символов, целых и вещественных чисел, а также для сравнения ссылок при
+                    работе с объектами.</p>
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>&lt;</td>
+                        <td>Меньше</td>
+                        <td>&gt;</td>
+                        <td>Больше</td>
+                    </tr>
+                    <tr>
+                        <td>&lt;=</td>
+                        <td>Меньше либо равно</td>
+                        <td>&gt;=</td>
+                        <td>Больше либо равно</td>
+                    </tr>
+                    <tr>
+                        <td>==</td>
+                        <td>Равно</td>
+                        <td>!=</td>
+                        <td>Не равно</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="fragment">
+                    <p class="header">Логические операторы</p>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>||, |, |=</td>
+                            <td>ИЛИ</td>
+                            <td>&&,&,&=</td>
+                            <td>И</td>
+                        </tr>
+                        <tr>
+                            <td>!</td>
+                            <td>Унарное отрицание</td>
+                            <td>^, ^=</td>
+                            <td>исключающее ИЛИ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="fragment">
+                    <p>&& и || - вычисление по сокращенной схеме</p>
+                    <p>& и | - вычисление по полной схеме</p>
+                </div>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h4>Операторы. Операторы отношения и логические операторы</h4>
+                </div>
+
+                <pre><code data-trim data-noescape class="java">
+                    public static void main(String[] args) {
+                    if (bFalse() <mark>&&</mark> bTrue());
+                        System.out.println();
+
+                    if (bFalse() <mark>&</mark> bTrue());
+                        System.out.println();
+                    }
+
+                    private static boolean bTrue() {
+                        System.out.print("true ");
+                        return true;
+                    }
+
+                    private static boolean bFalse() {
+                        System.out.print("false ");
+                        return false;
+                    }
+                </code></pre>
+                <p>Результат</p>
+                <div class="replace">
+                    <div class="result fragment fade-out" data-fragment-index="0">
+                        <span>?</span><br/>
+                        <span>?</span>
+                    </div>
+                    <div class="result fragment fade-in" data-fragment-index="0">
+                        <span>false</span><br/>
+                        <span>false true</span>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section>
+            <div class="slide-header">
+                <h3>Операторы. Дополнительные операторы Java</h3>
+            </div>
+
+            <p>К операторам относится также оператор определения принадлежности типу
+                <mark>instanceof</mark>
+                ,
+                оператор
+                <mark>[&nbsp;]</mark>
+                и тернарный оператор
+                <mark>?:</mark>
+                (if-then-else).
+            </p>
+            <p>Логические операции выполняются над значениями типа <b>boolean</b> (<b>true</b> или <b>false</b>).</p>
+            <p>Оператор <b>instanceof</b> возвращает значение <b>true</b>, если объект является экземпляром данного
+                класса.</p>
+        </section>
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Приоритет операций</h3>
+                </div>
+
+                <table style="font-size: 34px">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Операция</th>
+                        <th>Порядок выполнения<br/> операций в выражении<br/> при одном приоритете</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>[ ] . () (вызов метода)</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>expr++ expr--</strong></td>
+                        <td><i>Справа налево</i></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>++expr --expr +expr -expr ~ ! ()(приведение) new</strong></td>
+                        <td><i>Справа налево</i></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>* / %</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>+ - , +(конкатенация строк)</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><strong><< >> >>></strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><strong>< <= > >= instanceof</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td><strong>== !=</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td><strong>&(битовое), &(логическое)</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td><strong>^(битовое), ^(логическое)</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td><strong>| (битовое), | (логическое)</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td><strong>&&</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td><strong>||</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td><strong>?:</strong></td>
+                        <td>Слева направо</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td><strong>= += -= *= /= %= |= ^= <<= >>= >>>=</strong></td>
+                        <td><i>Справа налево</i></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Приоритет операций</h3>
+                </div>
+
+                <pre><code data-trim data-noescape="" class="java">
+                    int i=3;
+
+                    i = <span class="fragment highlight-red" data-fragment-index="1">-i<span
+                        class="fragment highlight-red" data-fragment-index="0">++</span>*100</span> + <span
+                        class="fragment highlight-blue" data-fragment-index="3">i<span class="fragment highlight-blue"
+                                                                                       data-fragment-index="2">--</span>*10</span> + -i;
+
+                    System.out.println(i);
+                </code></pre>
+
+                <table class="fragment" data-fragment-index="0">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Операция</th>
+                        <th>Subresult</th>
+                        <th>i</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>++</td>
+                        <td><code>-3*100 + i--*10 + -i</code></td>
+                        <td>4</td>
+                    </tr>
+                    <tr class="fragment" data-fragment-index="1">
+                        <td>2</td>
+                        <td>-,*</td>
+                        <td><code>-300 + i--*10 + -i</code></td>
+                        <td>4</td>
+                    </tr>
+                    <tr class="fragment" data-fragment-index="2">
+                        <td>3</td>
+                        <td>--</td>
+                        <td><code>-300 + 4*10 + -i</code></td>
+                        <td>3</td>
+                    </tr>
+                    <tr class="fragment" data-fragment-index="3">
+                        <td>4</td>
+                        <td>*</td>
+                        <td><code>-300 + 40 + -i</code></td>
+                        <td>3</td>
+                    </tr>
+                    <tr class="fragment" data-fragment-index="4">
+                        <td>5</td>
+                        <td>-</td>
+                        <td><code>-300 + 40 + -3</code></td>
+                        <td>3</td>
+                    </tr>
+                    <tr class="fragment" data-fragment-index="5">
+                        <td>6</td>
+                        <td>+</td>
+                        <td><code>-263</code></td>
+                        <td>3</td>
+                    </tr>
+                    <tr class="fragment" data-fragment-index="6">
+                        <td>7</td>
+                        <td>=</td>
+                        <td></td>
+                        <td>-263</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </section>
+        <section>
+            <div class="slide-header">
+                <h3>Операторы. Характеристики операторов</h3>
+            </div>
+
+            <p>Операции над целыми числами: <strong>+, -, *, %, /, ++, --</strong><br/>
+                и битовые операции <strong>&, |, ^, ~</strong><br/>
+                аналогичны операциям большинства языков программирования.</p>
+            <p>Деление на ноль целочисленного типа вызывает исключительную ситуацию,<br/> переполнение не контролируется
+                (исключение не выбрасывается).</p>
+        </section>
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. IEEE 754</h3>
+                </div>
+
+                <p>Операции над числами с плавающей точкой практически те же, что и в других языках.</p>
+                <p>Все вычисления, которые проводятся над числами с плавающей точкой следуют стандарту <strong>IEEE
+                    754</strong>.</p>
+                <p>По стандарту <strong>IEEE 754</strong> введены понятие бесконечности <strong>+Infinity</strong> и
+                    <strong>–Infinity</strong><br/>
+                    и значение <strong>NaN</strong> (Not a Number).</p>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. IEEE 754</h3>
+                </div>
+
+                <ul style="margin-top: 20px">
+                    <li>Результат деления положительного числа на 0 равен положительной бесконечности, отрицательного –
+                        отрицательной бесконечности.
+                    </li>
+                    <li class="fragment">Вычисление квадратного корня из отрицательного числа или деление 0/0 – не
+                        число.
+                    </li>
+                    <li class="fragment">Переполнение дает +Infinity или –Infinity в зависимости от направления</li>
+                    <li class="fragment">Любая арифметическая операция с NaN дает NaN.</li>
+                    <li class="fragment">NaN != NaN</li>
+                </ul>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. IEEE 754</h3>
+                </div>
+
+                <p>Java вводит следующие значения в классах <strong>Double</strong> и <strong>Float</strong>:</p>
+                <ul class="fragment">
+                    <li>Double.MAX_VALUE</li>
+                    <li>Double.MIN_VALUE</li>
+                    <li>Double.POSITIVE_INFINITY</li>
+                    <li>Double.NEGATIVE_INFINITY</li>
+                    <li>Double.NaN</li>
+                    <li>Double.isNaN()</li>
+                </ul>
+                <ul class="fragment">
+                    <li>Float.MAX_VALUE</li>
+                    <li>Float.MIN_VALUE</li>
+                    <li>Float.POSITIVE_INFINITY</li>
+                    <li>Float.NEGATIVE_INFINITY</li>
+                    <li>Float.NaN</li>
+                    <li>Float.isNaN()</li>
+                </ul>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. IEEE 754</h3>
+                </div>
+
+                <pre><code data-trim class="java">
+                    double i = 7.0;
+                    double k;
+                     
+                    System.out.println(i / 0);
+                    System.out.println(-i / 0);
+                    System.out.println(k=Math.sqrt(-i));
+
+                    System.out.println(k == k);
+                    System.out.println(Double.isNaN(k));
+                </code></pre>
+                <p>Результат</p>
+                <div class="replace">
+                    <div class="result fragment fade-out" data-fragment-index="0">
+                        <span>?</span><br/>
+                        <span>?</span><br/>
+                        <span>?</span><br/>
+                        <span>?</span><br/>
+                        <span>?</span>
+                    </div>
+                    <div class="result fragment fade-in" data-fragment-index="0">
+                        <span class="fragment">Infinity</span><br/>
+                        <span class="fragment">-Infinity</span><br/>
+                        <span class="fragment">NaN</span><br/>
+                        <span class="fragment">false</span><br/>
+                        <span class="fragment">true</span>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. strictfp</h3>
+                </div>
+
+                <p class="header">strictfp</p>
+                <ul>
+                    <li>Java использует FPU (<i>floating-point unit</i>, модуль операций с плавающей запятой) для
+                        вычислений с плавающей точкой.
+                    </li>
+                    <li class="fragment">Регистры FPU могут быть шире 64 бит.</li>
+                    <li class="fragment">Результаты вычислений могут отличаться.</li>
+                    <li class="fragment">Модификатор strictfp включает режим строгой совместимости, результаты будут
+                        идентичны на любом процессоре.
+                    </li>
+                </ul>
+
+                <pre class="fragment"><code data-trim class="java">
+                    public strictfp class Main {
+                        public strictfp void method() {
+                        }
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. IEEE 754. Math & StrictMath</h3>
+                </div>
+
+                <p>Для организации математических вычислений в Java существует класс <strong>Math</strong> и <strong>StrictMath</strong>.
+                </p>
+                <ul>
+                    <li class="fragment"><span class="code">java.lang.StrictMath</span> – класс-утилита, содержащий
+                        основные математические функции.
+                        Гарантирует точную повторяемость числовых результатов вплоть до бита на разных аппаратных
+                        платформах.
+                    </li>
+                    <li class="fragment"><span class="code">java.lang.Math</span> – класс-утилита, работающая быстрее
+                        чем StrictMath (на старых версиях машины),
+                        но не гарантирующая точное воспроизводство числовых результатов.
+                    </li>
+                    <li class="fragment">В Java 6+ класс <span class="code">Math</span> делегирует вызовы в <span
+                            class="code">StrictMath</span>.
+                    </li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <div class="slide-header">
+                <h3>Операторы. Статический импорт</h3>
+            </div>
+
+            <p>Ключевое слово <strong>import</strong> с последующим ключевым словом <strong>static</strong>
+                используется для импорта статических полей и методов классов,
+                в результате чего отпадает необходимость в использовании имен классов перед ними.</p>
+
+            <pre><code data-trim class="java">
+                import static java.lang.Math.pow;
+                import static java.lang.Math.PI;
+                 
+                public class StaticImport {
+                    private int i = 20;
+                 
+                    public void staticImport() {
+                        double x;
+                        x = pow(i, 2)*PI;
+                        System.out.println("x=" + x);
+                    }
+                }
+            </code></pre>
+        </section>
+        <section>
+            <div class="slide-header">
+                <h3>Операторы. Блоки кода</h3>
+            </div>
+
+            <p>Блоки кода обрамляются в фигурные скобки
+                <mark>{&nbsp;}</mark>
+            </p>
+            <p>Охватывают</p>
+            <ul>
+                <li>определение класса</li>
+                <li>определения методов</li>
+                <li>логически связанные разделы кода</li>
+            </ul>
+
+            <pre><code data-trim class="java">
+                public class CodeBlock {
+                    public Date getToday() {
+                        //...
+                    }
+                 
+                    public static void main(String[] args) {
+                        CodeBlock object;
+                        //...
+                        if(object != null){
+                            //...
+                        }
+                    }
+                }
+            </code></pre>
+        </section>
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Операторы управления, if</h3>
+                </div>
+
+                <p class="header">Оператор if</p>
+                <p>Позволяет условное выполнение оператора или условный выбор двух операторов, выполняя один или другой,
+                    но не оба сразу.</p>
+
+                <pre><code data-trim class="java">
+                    if (boolexp) { /*операторы*/}
+                    else { /*операторы*/ }//может отсутствовать
+                </code></pre>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Операторы управления, циклы</h3>
+                </div>
+
+                <p class="header">Циклы</p>
+                <p>Циклы выполняются, пока булевское выражение <span class="code">boolexp</span> равно
+                    <strong>true</strong>.</p>
+                <p>Оператор прерывания цикла <strong>break</strong> и оператор прерывания итерации цикла <strong>continue</strong>,
+                    можно использовать с меткой, для обеспечения выхода из вложенных циклов.</p>
+
+                <pre class="fragment"><code data-trim class="java">
+                    while (boolexpr) { /*операторы*/ }
+                </code></pre>
+                <pre class="fragment"><code data-trim class="java">
+                    do { /*операторы*/ }
+                    while (boolexp);
+                </code></pre>
+                <pre class="fragment"><code data-trim class="java">
+                    for(exp1; boolexp; exp3){ /*операторы*/ }
+                </code></pre>
+                <pre class="fragment"><code data-trim class="java">
+                    for((Тип exp1 : exp2){ /*операторы*/ }
+                </code></pre>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Циклы, операторы безусловного перехода</h3>
+                </div>
+
+                <p class="fragment"><strong>break</strong> – применяется для выхода из цикла, оператора
+                    <strong>switch</strong></p>
+                <p class="fragment"><strong>continue</strong> - применяется для перехода к следующей итерации цикла</p>
+                <p class="fragment">В языке Java расширились возможности оператора прерывания цикла
+                    <strong>break</strong>
+                    и оператора прерывания итерации цикла <strong>continue</strong>, которые можно использовать с
+                    меткой.</p>
+
+                <pre class="fragment"><code data-trim class="java">
+                    Outer:
+                    for(int i=0; i < args.length ; i++) {
+                         // ...
+                        while(true) {
+                            break Outer;
+                        }
+                         // ...
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Использование циклов</h3>
+                </div>
+
+                <p>Проверка условия для всех циклов выполняется только один раз за одну итерацию,
+                    для циклов <strong>for</strong> и <strong>while</strong> – перед итерацией,
+                    для цикла <strong>do/while</strong> – по окончании итерации.</p>
+                <p class="fragment">Цикл <strong>for</strong> следует использовать при необходимости выполнения
+                    алгоритма строго определенное количество раз.
+                    Цикл <strong>while</strong> используется в случае,
+                    когда неизвестно число итераций для достижения необходимого результата,
+                    например, поиск необходимого значения в массиве или коллекции.
+                    Этот цикл применяется для организации бесконечных циклов в виде <strong>while(true)</strong>.</p>
+
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Использование циклов</h3>
+                </div>
+
+                <p>Рекомендации</p>
+                <ul>
+                    <li class="fragment">Для цикла <strong>for</strong> не рекомендуется в цикле изменять индекс цикла.
+                    </li>
+                    <li class="fragment">Условие завершения цикла должно быть очевидным, чтобы цикл не «сорвался» в
+                        бесконечный цикл.
+                    </li>
+                    <li class="fragment">Для индексов следует применять осмысленные имена.</li>
+                    <li class="fragment">Циклы не должны быть слишком длинными. Такой цикл претендует на выделение в
+                        отдельный метод.
+                    </li>
+                    <li class="fragment">Вложенность циклов не должна превышать трех.</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Операторы управления, switch</h3>
+                </div>
+
+                <p class="header">switch</p>
+                <p>Оператор <strong>switch</strong> передает управление одному из нескольких операторов в зависимости от
+                    значения выражения.</p>
+
+                <pre class="fragment"><code data-trim class="java">
+                    switch(exp) {
+                        case exp1:/*операторы, если exp==exp1*/
+                            break;
+                        case exp2:/*операторы, если exp==exp2*/
+                            break;
+                        default: /* операторы Java */
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Операторы управления, switch</h3>
+                </div>
+
+                <pre><code data-trim class="java">
+                    String s = new String("one");
+                    switch (s) {
+                        case "two":
+                            System.out.println("two");
+                            break;
+                        case "three":
+                            System.out.println("three");
+                            break;
+                        case "four":
+                            System.out.println("four");
+                            break;
+                        case "one":
+                            System.out.println("one");
+                            break;
+                        default:
+                            System.out.println("default");
+                    }
+                </code></pre>
+                <p>Результат</p>
+                <div class="replace">
+                    <div class="result fragment fade-out" data-fragment-index="0">
+                        ?
+                    </div>
+                    <div class="result fragment fade-in" data-fragment-index="0">
+                        one
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Операторы управления, switch</h3>
+                </div>
+
+                <pre><code data-trim class="java">
+                    int x = 10;
+                    switch (x) {
+                        case 20:
+                            System.out.println("20");
+                        case 30:
+                            System.out.println("30");
+                        default:
+                            System.out.println("default");
+                        case 10:
+                            System.out.println("10");
+                        case 40:
+                            System.out.println("40");
+                    }
+                </code></pre>
+                <p>Результат</p>
+                <div class="replace">
+                    <div class="result fragment fade-out" data-fragment-index="0">
+                        ?
+                    </div>
+                    <div class="result fragment fade-in" data-fragment-index="0">
+                        10<br/>
+                        40
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Instanceof</h3>
+                </div>
+
+                <p>Оператор <strong>instanceof</strong> возвращает значение <strong>true</strong>, если объект является
+                    экземпляром данного типа. Например, для иерархии наследования</p>
+
+                <div>
+                    <div class="graph graph-medium" data-graphviz="media/hierarchy.dot" align="left"
+                         style="display: inline-block;"></div>
+                    <div align="right" style="width: 600px; display: inline-block">
+                        <pre><code data-trim class="java">
+                            class Course extends Object {}
+                            class BaseCourse extends Course {}
+                            class FreeCourse extends BaseCourse {}
+                            class OptionalCourse extends Course {}
+                        </code></pre>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Instanceof</h3>
+                </div>
+
+                <p>Объект подкласса может быть использован всюду, где используется объект суперкласса</p>
+                <p>Результатом действия оператора <strong>instanceof</strong> будет истина,
+                    если объект является объектом типа c с которым идет поверка или одного из его подклассов, но не
+                    наоборот.</p>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Операторы. Instanceof</h3>
+                </div>
+
+                <pre><code data-trim class="java">
+                    public static void main(String[] args) {
+                        doLogic(new BaseCourse());
+                        doLogic(new OptionalCourse());
+                        doLogic(new FreeCourse());
+                    }
+                     
+                    public static void doLogic(Course c) {
+                        if (c instanceof BaseCourse) {
+                            System.out.println("BaseCourse");
+                        } else if (c instanceof OptionalCourse) {
+                            System.out.println("OptionalCourse");
+                        } else {
+                            System.out.println("Что-то другое.");
+                        }
+                    }
+                </code></pre>
+                <p>Результат</p>
+                <div class="replace">
+                    <div class="result fragment fade-out" data-fragment-index="0">
+                        ?
+                    </div>
+                    <div class="result fragment fade-in" data-fragment-index="0">
+                        BaseCourse<br/>
+                        OptionalCourse<br/>
+                        BaseCourse
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h3>Коллекции. Обзор</h3>
+                </div>
+
+                <table class="columns">
+                    <thead>
+                    <tr>
+                        <th class="fragment" data-fragment-index="0">List</th>
+                        <th class="fragment" data-fragment-index="2">Set</th>
+                        <th class="fragment" data-fragment-index="4">Map</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="fragment" data-fragment-index="0"><strong>Список</strong></td>
+                        <td class="fragment" data-fragment-index="2"><strong>Множество</strong></td>
+                        <td class="fragment" data-fragment-index="4"><strong>Ассоциативный
+                            массив<br/>Справочник</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="fragment" data-fragment-index="0">
+                            <ul>
+                                <li>Сохраняет порядок вставки элементов</li>
+                                <li>Может содержать дубликаты</li>
+                            </ul>
+                        </td>
+                        <td class="fragment" data-fragment-index="2">
+                            <ul>
+                                <li>Не содержит дубликатов</li>
+                            </ul>
+                        </td>
+                        <td class="fragment" data-fragment-index="4">
+                            <ul>
+                                <li>Хранит пары {ключ,&nbsp;значение}</li>
+                                <li>Не содержит дубликатов по ключу</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fragment" data-fragment-index="1">
+                            <pre><code data-trim class="java">
+                                IntList ints = createIntList();
+                                ints.add(100);
+                                ints.add(13);
+                                assert ints.get(0) == 100;
+                                assert ints.get(1) == 13;
+                            </code></pre>
+                        </td>
+                        <td class="fragment" data-fragment-index="3">
+                            <pre><code data-trim class="java">
+                                IntSet ints = createIntSet();
+                                ints.add(100);
+                                ints.add(13);
+                                ints.add(100);
+                                ints.remove(100);
+                                assert ints.contains(13) == true;
+                                assert ints.contains(100) == false;
+                            </code></pre>
+                        </td>
+                        <td class="fragment" data-fragment-index="5">
+                            <pre><code data-trim class="java">
+                                StringToIntMap priorities = create();
+                                StringToIntMap priorities = create();
+                                priorities.set("a", 100);
+                                priorities.set("b", 2);
+                                priorities.set("b", 3);
+                                assert priorities.get("a") == 100;
+                                assert priorities.get("b") == 3;
+                            </code></pre>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Коллекции. Set64</h3>
+                </div>
+
+                <p>Set64</p>
+
+                <div class="graph fragment" data-graphviz="media/Set64.dot" style="height: 200px"></div>
+
+                <p class="fragment">union</p>
+
+                <div class="graph fragment" data-graphviz="media/Set64_union.dot" style="height: 200px"></div>
+
+                <p class="fragment">intersection<br/>difference<br/>subset</p>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Коллекции. IntSet</h3>
+                </div>
+
+                <p>IntSet</p>
+
+
+                <div class="graph fragment" data-graphviz="media/IntSet.dot" style="height: 600px"></div>
+            </section>
+        </section>
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h3>Merge sort</h3>
+                </div>
+
+                <p>Сортировка слиянием</p>
+
+                <div class="graph" data-graphviz="media/merge_sort_1.dot" style="height: 200px"></div>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Merge sort. Merge</h3>
+                </div>
+
+                <p class="header">merge</p>
+                <div class="fragment">
+                    <p>copy</p>
+                    <div class="graph" data-graphviz="media/merge_sort_2.dot" style="height: 250px"></div>
+                </div>
+
+                <div class="fragment">
+                    <p>merge</p>
+                    <div>
+                        <div class="graph" data-graphviz="media/merge_sort_3.dot"
+                             style="height: 350px; display: inline-block"></div>
+                        <div class="graph fragment" data-graphviz="media/merge_sort_4.dot"
+                             style="height: 350px; display: inline-block"></div>
+                        <div class="graph fragment" data-graphviz="media/merge_sort_5.dot"
+                             style="height: 350px; display: inline-block"></div>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div class="slide-header">
+                    <h3>Merge sort. Сложность</h3>
+                </div>
+
+                <div class="graph" data-graphviz="media/merge_sort_tree.dot" style="height: 600px"></div>
+            </section>
+        </section>
+        <section>
+            <div class="slide-header">
+                <h3>Двоичный поиск</h3>
+            </div>
+            <div class="graph" data-graphviz="media/bisearch.dot" style="height: 600px"></div>
+
+        </section>
+        <section>
+            <section>
+                <div class="slide-header">
+                    <h3>Merge sort. Восходящая</h3>
+                </div>
+
+                <p>Восходящая сортировка слиянием</p>
+
+                <div class="graph" data-graphviz="media/merge_sort_1.dot" style="height: 150px"></div>
+                <div class="graph fragment" data-graphviz="media/merge_sort_up_1.dot" style="height: 200px"></div>
+                <div class="graph fragment" data-graphviz="media/merge_sort_up_2.dot" style="height: 200px"></div>
+                <div class="graph fragment" data-graphviz="media/merge_sort_up_3.dot" style="height: 200px"></div>
+            </section>
+        </section>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        history: true,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+
+        center: false,
+
+        slideNumber: true,
+
+        // Transition style
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+            {
+                src: 'https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.0/viz.js',
+                async: true,
+                callback: () => {
+                    const parser = new DOMParser();
+                    document.querySelectorAll("div[data-graphviz]")
+                        .forEach(el =>
+                            fetch(el.getAttribute("data-graphviz"))
+                                .then(response => {
+                                    const image = Viz(response.text(), {format: "svg", scale: 4});
+                                    const svg = parser.parseFromString(image, "image/svg+xml");
+                                    el.appendChild(svg.documentElement);
+                                }));
+                }
+            },
+
+            {src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/markdown/marked.js',},
+            {src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/markdown/markdown.js',},
+            {src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true,},
+
+            {
+                src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js',
+                async: true,
+                callback: () => hljs.initHighlightingOnLoad(),
+            }
+        ],
+    });
+</script>
+</body>
+</html>

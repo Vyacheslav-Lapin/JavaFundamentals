@@ -10,9 +10,13 @@ build
 .project
 .settings
 
-# Gradle #
+# Gradle & Maven #
 target
+.gradle
+gradle
 gradlew*
+gradle.properties
+set_env.sh
 
 # Package Files #
 *.jar

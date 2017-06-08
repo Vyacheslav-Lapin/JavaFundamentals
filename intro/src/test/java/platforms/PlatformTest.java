@@ -1,10 +1,10 @@
 package platforms;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class PlatformTest {
 
@@ -20,9 +20,8 @@ public class PlatformTest {
     }
 
     private static void assertTooMany(Collection<?> things) {
-        if (things.size() < TOO_MANY) {
-            fail();
-        }
+        if (things.size() < TOO_MANY)
+            fail("Too small collection!");
     }
 
 }

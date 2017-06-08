@@ -9,7 +9,7 @@ public class MaxFinder {
 
     private double[] as;
 
-    public MaxFinder(double[] as) {
+    public MaxFinder(double... as) {
         this.as = as;
     }
 

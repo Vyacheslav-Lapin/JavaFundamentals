@@ -28,11 +28,10 @@ public class MinFinder {
 
         for (int index = 1;; index++) {
             a = getA(index);
-            if (filter(a)) {
+            if (filter(a))
                 return index;
-            } else {
+            else
                 out.println(a);
-            }
         }
     }
 

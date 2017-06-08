@@ -10,7 +10,7 @@ public interface Platform {
 
     static Collection<Platform> getAll() {
         return Arrays.asList(
-                new DaVinciMachine(),
+                new JavaVirtualMachine(),
                 () -> ".NET Framework",
                 () -> "Client-side JavaScript Engine",
                 () -> "Android",

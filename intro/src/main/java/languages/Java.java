@@ -6,6 +6,6 @@ public class Java implements ProgrammingLanguage {
 
     @Override
     public String getName() {
-        return "languages.Java";
+        return "Java";
     }
 }

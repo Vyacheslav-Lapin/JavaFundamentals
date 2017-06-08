@@ -29,7 +29,7 @@ public class H2DaoTest {
     public static void prepare() throws Exception {
         ConnectionPool connectionPool =
                 ConnectionPool.create(RESOURCES_FILE_PATH + DB_PROPERTIES_FILE_NAME);
-        connectionPool.executeScript(RESOURCES_FILE_PATH + DB_PREPARE_FILE_NAME);
+        connectionPool.executeScripts(RESOURCES_FILE_PATH + DB_PREPARE_FILE_NAME);
 
         personDao = new H2PersonDao(connectionPool);
         gunDao = new H2GunDao(connectionPool);

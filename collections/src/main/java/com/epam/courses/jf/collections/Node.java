@@ -1,6 +1,6 @@
 package com.epam.courses.jf.collections;
 
-import com.epam.courses.jf.common.functions.Either;
+import com.hegel.core.Either;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -1,0 +1,10 @@
+apply plugin: 'war'
+
+dependencies {
+    compile project(":core"),
+            'javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:+',
+            'org.glassfish.web:javax.servlet.jsp.jstl:+'
+
+    providedCompile 'org.apache.tomcat:tomcat-api:+',
+            'org.apache.tomcat:tomcat-jsp-api:+'
+}

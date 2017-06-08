@@ -1,7 +1,6 @@
 package filters;
 
-
-import com.epam.courses.jf.common.servlets.HttpFilter;
+import com.hegel.web.HttpFilter;
 import model.Person;
 import service.SecurityService;
 

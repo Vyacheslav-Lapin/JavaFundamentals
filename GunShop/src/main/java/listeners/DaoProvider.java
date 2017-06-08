@@ -35,7 +35,7 @@ public class DaoProvider implements ServletContextListener {
         final String dbPrepareFilePath = servletContext.getRealPath(RESOURCES_FILE_PATH + DB_PREPARE_FILE_NAME);
 
         connectionPool = ConnectionPool.create(dbPropertiesFilePath);
-        connectionPool.executeScript(dbPrepareFilePath);
+        connectionPool.executeScripts(dbPrepareFilePath);
 
         final PersonDao personDao = new H2PersonDao(connectionPool);
         servletContext.setAttribute(PERSON_DAO, personDao);

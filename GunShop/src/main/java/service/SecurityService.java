@@ -1,6 +1,6 @@
 package service;
 
-import com.epam.courses.jf.common.StringEncryptUtil;
+import com.hegel.core.StringEncryptUtil;
 import dao.interfaces.PersonDao;
 import model.Person;
 

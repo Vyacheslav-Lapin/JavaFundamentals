@@ -18,7 +18,7 @@
 
     <simpleType name="propertyExpression" id="propertyExpression">
         <restriction base="string">
-            <pattern value="$\{[\w\.]+\}"/>
+            <pattern value="$\{[\w.]+\}"/>
         </restriction>
     </simpleType>
 

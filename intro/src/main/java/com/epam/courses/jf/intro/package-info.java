@@ -1,6 +1,5 @@
 /**
- * Основы языка программирования
- * languages.Java и платформы languages.Java SE для начинающих
+ * Основы языка программирования Java и платформы Java SE для начинающих
  *
  * @author Olga Smolyakova, PhD, OCJP, Olga_Smolyakova@epam.com
  * @author Ihar Blinou, PhD, OCJI, Ihar_Blinou@epam.com

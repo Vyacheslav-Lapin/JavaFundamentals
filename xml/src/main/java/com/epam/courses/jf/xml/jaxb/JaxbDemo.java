@@ -1,6 +1,7 @@
 package com.epam.courses.jf.xml.jaxb;
 
 import com.epam.courses.jf.xml.Food;
+import lombok.val;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,18 +16,19 @@ public class JaxbDemo {
     public static final String FOOD_XML = "stud.xml";
 
     public static void main(String... args) throws JAXBException, FileNotFoundException {
-        Food food = new Food(123, "nnn", "333", "ddd", 234);
+
+        val food = new Food(123, "nnn", "333", "ddd", 234);
 
         marshal(food);
         System.out.println("XML-файл создан!");
 
-        System.out.println(food.equals(unmarshal()));
+        System.out.println(food.equals(unmarshal(FOOD_XML)));
     }
 
-    private static Food unmarshal() throws JAXBException {
+    private static Food unmarshal(String pathname) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(Food.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        return (Food) jaxbUnmarshaller.unmarshal(new File(FOOD_XML));
+        return (Food) jaxbUnmarshaller.unmarshal(new File(pathname));
     }
 
     private static void marshal(Food food) throws JAXBException, FileNotFoundException {

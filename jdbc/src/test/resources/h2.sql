@@ -1,3 +1,5 @@
+SET MODE POSTGRESQL;
+
 CREATE TABLE Person (
   id         INT PRIMARY KEY AUTO_INCREMENT,
   first_name VARCHAR(255) NOT NULL,
@@ -39,9 +41,9 @@ INSERT INTO Gun (name, caliber) VALUES ('AKM-47', 7.62);
 INSERT INTO Gun (name, caliber) VALUES ('AK-74', 5.45);
 
 CREATE TABLE Instance (
-  id INT PRIMARY KEY AUTO_INCREMENT,
+  id       INT PRIMARY KEY AUTO_INCREMENT,
   model_id INT NOT NULL,
-  FOREIGN KEY (model_id) REFERENCES Gun(id)
+  FOREIGN KEY (model_id) REFERENCES Gun (id)
 );
 
 INSERT INTO Instance (model_id) VALUES (1);

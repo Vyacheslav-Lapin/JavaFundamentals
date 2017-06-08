@@ -1,286 +1,296 @@
 package com.epam.courses.jf.jdbc.cp;
 
-import com.epam.courses.jf.common.Wrapper;
+import com.hegel.core.Wrapper;
 
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
-//^\s{4}([^v@][\w<,\s>?]+)\s(\w+)\(([^\)]*)\)(\sthrows\s\w+)?;$
-//    default $1 $2($3)$4{\n        return toSrc().$2($3);\n    }
-
-//^\s{4}void\s(\w+)\(([^\)]*)\)(\sthrows\s\w+)?;$
-//    default void $1($2)$3{\n        toSrc().$1($2);\n    }
+/*
+ * 1. Для методов, возвращающих значения:
+ * "^\s{4}([^v@\s][\w<,\s?>]+)\s(\w+)\(([^\)]*)\)\s([^;]*);$"
+ * "    default $1 $2($3) $4 {\n        return get().$2($3);\n    }"
+ *
+ * 2. Для методов, не возвращающих значения:
+ * "^\s{4}void\s(\w+)\(([^\)]*)\)\s([^;]*);$"
+ * "    default void $1($2) $3 {\n        get().$1($2);\n    }"
+ *
+ * 3. Убираем тип у параметров при вызове - для методов с одним параметром:
+ * "\(([\w\<\>]+\s(\w+)(,\s)?)+\);"
+ * "($2);"
+ *
+ * 4. (Типы у методов с больше чем одним параметром убираем вручную)
+ */
 @FunctionalInterface
 public interface ConnectionProxy extends Connection, Wrapper<Connection> {
 
     @Override
     default Statement createStatement() throws SQLException {
-        return toSrc().createStatement();
+        return get().createStatement();
     }
 
     @Override
     default PreparedStatement prepareStatement(String sql) throws SQLException {
-        return toSrc().prepareStatement(sql);
+        return get().prepareStatement(sql);
     }
 
     @Override
     default CallableStatement prepareCall(String sql) throws SQLException {
-        return toSrc().prepareCall(sql);
+        return get().prepareCall(sql);
     }
 
     @Override
     default String nativeSQL(String sql) throws SQLException {
-        return toSrc().nativeSQL(sql);
+        return get().nativeSQL(sql);
     }
 
     @Override
     default void setAutoCommit(boolean autoCommit) throws SQLException{
-        toSrc().setAutoCommit(autoCommit);
+        get().setAutoCommit(autoCommit);
     }
 
     @Override
     default boolean getAutoCommit() throws SQLException {
-        return toSrc().getAutoCommit();
+        return get().getAutoCommit();
     }
 
     @Override
     default void commit() throws SQLException{
-        toSrc().commit();
+        get().commit();
     }
 
     @Override
     default void rollback() throws SQLException{
-        toSrc().rollback();
+        get().rollback();
     }
 
     @Override
     default void close() throws SQLException{
-        toSrc().close();
+        get().close();
     }
 
     @Override
     default boolean isClosed() throws SQLException {
-        return toSrc().isClosed();
+        return get().isClosed();
     }
 
     @Override
     default DatabaseMetaData getMetaData() throws SQLException {
-        return toSrc().getMetaData();
+        return get().getMetaData();
     }
 
     @Override
     default void setReadOnly(boolean readOnly) throws SQLException{
-        toSrc().setReadOnly(readOnly);
+        get().setReadOnly(readOnly);
     }
 
     @Override
     default boolean isReadOnly() throws SQLException {
-        return toSrc().isReadOnly();
+        return get().isReadOnly();
     }
 
     @Override
     default void setCatalog(String catalog) throws SQLException{
-        toSrc().setCatalog(catalog);
+        get().setCatalog(catalog);
     }
 
     @Override
     default String getCatalog() throws SQLException {
-        return toSrc().getCatalog();
+        return get().getCatalog();
     }
 
     @Override
     default void setTransactionIsolation(int level) throws SQLException{
-        toSrc().setTransactionIsolation(level);
+        get().setTransactionIsolation(level);
     }
 
     @Override
     default int getTransactionIsolation() throws SQLException {
-        return toSrc().getTransactionIsolation();
+        return get().getTransactionIsolation();
     }
 
     @Override
     default SQLWarning getWarnings() throws SQLException {
-        return toSrc().getWarnings();
+        return get().getWarnings();
     }
 
     @Override
     default void clearWarnings() throws SQLException{
-        toSrc().clearWarnings();
+        get().clearWarnings();
     }
 
     @Override
     default Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-        return toSrc().createStatement(resultSetType, resultSetConcurrency);
+        return get().createStatement(resultSetType, resultSetConcurrency);
     }
 
     @Override
     default PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        return toSrc().prepareStatement(sql, resultSetType, resultSetConcurrency);
+        return get().prepareStatement(sql, resultSetType, resultSetConcurrency);
     }
 
     @Override
     default CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        return toSrc().prepareCall(sql, resultSetType, resultSetConcurrency);
+        return get().prepareCall(sql, resultSetType, resultSetConcurrency);
     }
 
     @Override
     default Map<String, Class<?>> getTypeMap() throws SQLException {
-        return toSrc().getTypeMap();
+        return get().getTypeMap();
     }
 
     @Override
     default void setTypeMap(Map<String, Class<?>> map) throws SQLException{
-        toSrc().setTypeMap(map);
+        get().setTypeMap(map);
     }
 
     @Override
     default void setHoldability(int holdability) throws SQLException{
-        toSrc().setHoldability(holdability);
+        get().setHoldability(holdability);
     }
 
     @Override
     default int getHoldability() throws SQLException {
-        return toSrc().getHoldability();
+        return get().getHoldability();
     }
 
     @Override
     default Savepoint setSavepoint() throws SQLException {
-        return toSrc().setSavepoint();
+        return get().setSavepoint();
     }
 
     @Override
     default Savepoint setSavepoint(String name) throws SQLException {
-        return toSrc().setSavepoint(name);
+        return get().setSavepoint(name);
     }
 
     @Override
     default void rollback(Savepoint savepoint) throws SQLException{
-        toSrc().rollback(savepoint);
+        get().rollback(savepoint);
     }
 
     @Override
     default void releaseSavepoint(Savepoint savepoint) throws SQLException{
-        toSrc().releaseSavepoint(savepoint);
+        get().releaseSavepoint(savepoint);
     }
 
     @Override
     default Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return toSrc().createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
+        return get().createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     @Override
     default PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return toSrc().prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
+        return get().prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     @Override
     default CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return toSrc().prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
+        return get().prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     @Override
     default PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
-        return toSrc().prepareStatement(sql, autoGeneratedKeys);
+        return get().prepareStatement(sql, autoGeneratedKeys);
     }
 
     @Override
     default PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-        return toSrc().prepareStatement(sql, columnIndexes);
+        return get().prepareStatement(sql, columnIndexes);
     }
 
     @Override
     default PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
-        return toSrc().prepareStatement(sql, columnNames);
+        return get().prepareStatement(sql, columnNames);
     }
 
     @Override
     default Clob createClob() throws SQLException {
-        return toSrc().createClob();
+        return get().createClob();
     }
 
     @Override
     default Blob createBlob() throws SQLException {
-        return toSrc().createBlob();
+        return get().createBlob();
     }
 
     @Override
     default NClob createNClob() throws SQLException {
-        return toSrc().createNClob();
+        return get().createNClob();
     }
 
     @Override
     default SQLXML createSQLXML() throws SQLException {
-        return toSrc().createSQLXML();
+        return get().createSQLXML();
     }
 
     @Override
     default boolean isValid(int timeout) throws SQLException {
-        return toSrc().isValid(timeout);
+        return get().isValid(timeout);
     }
 
     @Override
     default void setClientInfo(String name, String value) throws SQLClientInfoException{
-        toSrc().setClientInfo(name, value);
+        get().setClientInfo(name, value);
     }
 
     @Override
     default void setClientInfo(Properties properties) throws SQLClientInfoException{
-        toSrc().setClientInfo(properties);
+        get().setClientInfo(properties);
     }
 
     @Override
     default String getClientInfo(String name) throws SQLException {
-        return toSrc().getClientInfo(name);
+        return get().getClientInfo(name);
     }
 
     @Override
     default Properties getClientInfo() throws SQLException {
-        return toSrc().getClientInfo();
+        return get().getClientInfo();
     }
 
     @Override
     default Array createArrayOf(String typeName, Object[] elements) throws SQLException {
-        return toSrc().createArrayOf(typeName, elements);
+        return get().createArrayOf(typeName, elements);
     }
 
     @Override
     default Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-        return toSrc().createStruct(typeName, attributes);
+        return get().createStruct(typeName, attributes);
     }
 
     @Override
     default void setSchema(String schema) throws SQLException{
-        toSrc().setSchema(schema);
+        get().setSchema(schema);
     }
 
     @Override
     default String getSchema() throws SQLException {
-        return toSrc().getSchema();
+        return get().getSchema();
     }
 
     @Override
     default void abort(Executor executor) throws SQLException{
-        toSrc().abort(executor);
+        get().abort(executor);
     }
 
     @Override
     default void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException{
-        toSrc().setNetworkTimeout(executor, milliseconds);
+        get().setNetworkTimeout(executor, milliseconds);
     }
 
     @Override
     default int getNetworkTimeout() throws SQLException {
-        return toSrc().getNetworkTimeout();
+        return get().getNetworkTimeout();
     }
 
     @Override
     default <T> T unwrap(Class<T> iface) throws SQLException {
-        return toSrc().unwrap(iface);
+        return get().unwrap(iface);
     }
 
     @Override
     default boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return toSrc().isWrapperFor(iface);
+        return get().isWrapperFor(iface);
     }
 }
